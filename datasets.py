@@ -1,20 +1,15 @@
 from torch.utils.data import Dataset
 import pandas as pd
 import torch
+from tqdm import tqdm
 
 SCAN_PATH = 'data/SCAN/SCAN_dataset.csv'
 SCAN_EXAMPLES_PATH = 'data/SCAN/SCAN_examples.txt'
-ANALOGY_TEMPLATE_SIMPLE_FULL = "If {} is like {}, then {} is like"
+ANALOGY_TEMPLATE_SIMPLE_FULL = "If {} is like {}, then {} is like {}."
 ANALOGY_TEMPLATE_SIMPLE_INFERENCE = "If {} is like {}, then {} is like"
 
 # active vs passive
 # simple wording VS complex wording
-
-def create_analogy_sentence(self, analogy_values, anal):
-    if inference_sent:
-        return self.inference_analogy.format(*analogy_values)
-    else:
-        return self.full_analogy.format(*analogy_values)
 
 def get_list_alternatives(alternatives):
     if alternatives == 'nan':
@@ -24,7 +19,11 @@ def get_list_alternatives(alternatives):
 
 
 class ScanDataset(Dataset):
-    def __init__(self, shot_nr=1, examples_start_idx=0, analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE, analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL):
+    def __init__(self,
+                 shot_nr=1,
+                 examples_start_idx=0,
+                 analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+                 analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL):
         self.shot_nr = shot_nr
         self.examples_start_idx = examples_start_idx
         self.analogy_sentence_inference = analogy_sentence_infer
@@ -74,7 +73,6 @@ class ScanDataset(Dataset):
 
         # Remapping the indices in df so that those corresponding to the examples_to_consider are removed.
         # This way, the examples will not be returned when iterating through the df
-        print(self.current_examples)
         indices_examples = []
         curr_examples = []
         for k in self.current_examples:
@@ -83,19 +81,9 @@ class ScanDataset(Dataset):
             idx = self.df[(self.df['source'] == ex['source']) & (self.df['target'] == ex['target']) & (
                     self.df['targ_word'] == ex['targ_word']) & (self.df['targ_word'] == ex['targ_word'])].index
             indices_examples.append(idx.values[0])
-
-        print("Indices of the examples are: ")
-        print(indices_examples)
-
-        print("Initial df indicies: ")
-        print(self.df_remapped_indices)
         for ex_i in indices_examples:
             self.df_remapped_indices.pop(ex_i)
 
-        print("Final df indicies: ")
-        print(self.df_remapped_indices)
-
-        print('Done loading SCAN')
 
     def __len__(self):
         return int(len(self.df))
@@ -120,3 +108,5 @@ class ScanDataset(Dataset):
 
 if __name__ == '__main__':
     dataset = ScanDataset()
+    for i, sample in tqdm(enumerate(dataset)):
+        print(sample)

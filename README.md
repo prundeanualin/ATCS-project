@@ -6,3 +6,6 @@ The `SCAN_dataset.csv` contains analogies from 2 domains: science and metaphor. 
 
 The `SCAN_examples.txt` file contains detailed examples for items from the `SCAN_dataset.csv`. There are 25 detailed examples 
 for each analogy type present in the original dataset. The examples are phrased in a neutral manner, with average word length.
+The examples will be extended with 
+- active vs passive
+- simple wording VS complex wording
