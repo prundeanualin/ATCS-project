@@ -1,0 +1,13 @@
+name: ATCS-project
+channels:
+  - defaults
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip=24.0
+  - pip:
+      - torch
+      - numpy
+      - tqdm
+      - pandas
