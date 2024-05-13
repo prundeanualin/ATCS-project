@@ -1,2 +1,5 @@
 .idea
+
+# Pycharm cache files
 prompt_templates/__pycache__
+__pycache__
