@@ -1,5 +1,6 @@
 from torch.utils.data import DataLoader
 
+from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
 from utils import LLMObj, parse_args
 import torch
 from tqdm import tqdm
@@ -29,7 +30,7 @@ print(LLMObj_args)
 os.environ['HF_TOKEN'] = "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"
 os.environ ['HF_HUB_ENABLE_HF_TRANSFER'] = '1'
 LLM = LLMObj(**LLMObj_args)
-dataloader = DataLoader(ScanDataset())
+dataloader = DataLoader(ScanDataset(analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE, analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL))
 generated_prompts = []
 
 for i, sample in tqdm(enumerate(dataloader)):
