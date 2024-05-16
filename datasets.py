@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 import pandas as pd
 import torch
 from tqdm import tqdm
@@ -6,7 +6,8 @@ from tqdm import tqdm
 from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
 
 SCAN_DATASET_PATH = 'data/SCAN/SCAN_dataset.csv'
-SCAN_EXAMPLES_PATH = 'data/SCAN/SCAN_examples.txt'
+SCAN_EXAMPLES_PATH = 'data/SCAN/SCAN_examples_baseline.txt'
+
 
 def get_list_alternatives(alternatives):
     if alternatives == 'nan':
@@ -17,19 +18,24 @@ def get_list_alternatives(alternatives):
 
 class ScanDataset(Dataset):
     def __init__(self,
+                 shuffle=False,
                  shot_nr=1,
                  examples_start_idx=0,
                  analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
                  analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL):
         """
-          - examples_start_idx: needs to be within the range of available examples per analogy type.
+            - examples_start_idx: needs to be within the range of available examples per analogy type.
+                For the current SCAN setup, this means 25 examples per analogy type.
+            - shot_nr: number of examples to be considered from each analogy type
         """
 
         self.shot_nr = shot_nr
         self.examples_start_idx = examples_start_idx
         self.analogy_sentence_inference = analogy_sentence_infer
         self.analogy_sentence_example = analogy_sentence_full
+        self.shuffle = shuffle
 
+        # Load the dataset from file
         with open(SCAN_DATASET_PATH, 'r', encoding='utf8') as f:
             self.df = pd.read_csv(f, sep=',', index_col=False)
 
@@ -47,11 +53,14 @@ class ScanDataset(Dataset):
 
             self.df.at[first.values[0], 'alternatives'] = self.df.at[first.values[0], 'alternatives'] + row[
                 'alternatives'] + [row['src_word']]
+        if self.shuffle:
+            self.df = self.df.sample(frac=1).reset_index(drop=True)
+
+        # Load the examples from file
         self.examples = {
             'science': [],
             'metaphor': []
         }
-
         with open(SCAN_EXAMPLES_PATH, 'r', encoding='utf8') as f:
             lines = [line.rstrip() for line in f]
             nr_examples = round(len(lines) / 3)
@@ -74,6 +83,8 @@ class ScanDataset(Dataset):
         self.set_current_examples_and_exclude_from_dataset(self.examples_start_idx, self.shot_nr)
 
     def set_current_examples_and_exclude_from_dataset(self, examples_start_idx, nr_examples):
+        self.examples_start_idx = examples_start_idx
+        self.shot_nr = nr_examples
         # Get X (=nr_examples) examples starting from the start_idx, for each analogy type
         self.current_examples = []
         for k in self.examples.keys():
@@ -85,7 +96,7 @@ class ScanDataset(Dataset):
         indices_examples = []
         for ex in self.current_examples:
             idx = self.df[(self.df['source'] == ex['source']) & (self.df['target'] == ex['target']) & (
-                    self.df['targ_word'] == ex['targ_word']) & (self.df['targ_word'] == ex['targ_word'])].index
+                    self.df['targ_word'] == ex['targ_word']) & (self.df['src_word'] == ex['src_word'])].index
             indices_examples.append(idx.values[0])
         for ex_i in indices_examples:
             self.df_remapped_indices.pop(ex_i)
@@ -104,7 +115,6 @@ class ScanDataset(Dataset):
 
         return {
             'inference': self.analogy_sentence_inference.format(*analogy_sent),
-            'examples': self.current_examples,
             'label': label,
             'alternatives': alternatives,
             'analogy_type': analogy_type
@@ -112,7 +122,16 @@ class ScanDataset(Dataset):
 
 
 if __name__ == '__main__':
-    dataset = ScanDataset()
-    dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
-    for i, sample in tqdm(enumerate(dataloader)):
+    dataset = ScanDataset(
+        shuffle=False,
+        shot_nr=1,
+        examples_start_idx=0,
+        analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+        analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL
+    )
+    print("Examples are: ")
+    print(dataset.examples)
+    for i, sample in tqdm(enumerate(dataset)):
         print(sample)
+        print("-----")
+        print(sample['inference'])
