@@ -3,8 +3,8 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 
-from get_datasets import get_datasets_if_not_present, SCAN_DATASET_FILEPATH, SCAN_EXAMPLES_FILEPATH, EXAMPLE_CATEGORIES
-from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
+from get_datasets import *
+from prompt_templates.analogy import *
 
 
 def get_list_alternatives(alternatives):
