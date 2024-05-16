@@ -16,10 +16,9 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Model')
 parser.add_argument('--tokenizer', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Tokenizer')
 parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quantization', choices=['None', '4bit'])
-parser.add_argument('--low_cpu_mem_usage', default=False, type=bool, help='Low CPU Memory usage')
+parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CPU Memory usage')
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 args = parser.parse_args()
-
 print("CL Arguments are:")
 print(args)
 
@@ -30,7 +29,17 @@ torch.set_default_device('cuda')
 
 seed_experiments(args.seed)
 
+# ----- Load dataset -----
+dataset = ScanDataset(
+    shuffle=False,
+    analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+    analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
+    examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
+    examples_start_idx=0,
+    examples_shot_nr=1
+)
 
+# ----- Prepare model arguments -----
 quantization = None
 if args.quantization == '4bit':
     quantization = BitsAndBytesConfig(load_in_4bit=True)
@@ -48,20 +57,10 @@ LLMObj_args = {
 print("LLMObj Arguments are:")
 print(LLMObj_args)
 
-# Load the dataset
-dataset = ScanDataset(
-    shuffle=False,
-    analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
-    analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
-    examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
-    examples_start_idx=0,
-    examples_shot_nr=1
-)
-
-# Load the model
+# ----- Load the model -----
 LLM = LLMObj(**LLMObj_args)
 
-# Run inference
+# ----- Run inference -----
 generated_prompts = []
 for i, sample in tqdm(enumerate(dataset)):
     output = LLM.generate(sample['inference'])
