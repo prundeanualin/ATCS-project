@@ -9,3 +9,14 @@ for each analogy type present in the original dataset. The examples are phrased 
 The examples will be extended with 
 - active vs passive
 - simple wording VS complex wording
+
+## Running the inference
+
+```
+python run.py
+```
+
+## Notebook
+
+The notebook downloads the files from Git and triggers the inference for the default params and only 3 data points - at least for now, 
+since I thought we can use it as a way to verify a working end-to-end implementation of the inference pipeline.
