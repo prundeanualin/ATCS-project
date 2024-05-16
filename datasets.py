@@ -3,10 +3,8 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 
+from get_datasets import get_datasets_if_not_present, SCAN_DATASET_FILEPATH, SCAN_EXAMPLES_FILEPATH, EXAMPLE_CATEGORIES
 from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
-
-SCAN_DATASET_PATH = 'data/SCAN/SCAN_dataset.csv'
-SCAN_EXAMPLES_PATH = 'data/SCAN/SCAN_examples_baseline.txt'
 
 
 def get_list_alternatives(alternatives):
@@ -19,24 +17,25 @@ def get_list_alternatives(alternatives):
 class ScanDataset(Dataset):
     def __init__(self,
                  shuffle=False,
-                 shot_nr=1,
-                 examples_start_idx=0,
                  analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
-                 analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL):
+                 analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
+                 examples_file=SCAN_EXAMPLES_FILEPATH,
+                 examples_start_idx=0,
+                 examples_shot_nr=1):
         """
             - examples_start_idx: needs to be within the range of available examples per analogy type.
                 For the current SCAN setup, this means 25 examples per analogy type.
             - shot_nr: number of examples to be considered from each analogy type
         """
 
-        self.shot_nr = shot_nr
-        self.examples_start_idx = examples_start_idx
         self.analogy_sentence_inference = analogy_sentence_infer
         self.analogy_sentence_example = analogy_sentence_full
         self.shuffle = shuffle
 
+        get_datasets_if_not_present()
+
         # Load the dataset from file
-        with open(SCAN_DATASET_PATH, 'r', encoding='utf8') as f:
+        with open(SCAN_DATASET_FILEPATH, 'r', encoding='utf8') as f:
             self.df = pd.read_csv(f, sep=',', index_col=False)
 
         # Transform alternatives into list of strings. If none is provided, then use an empty list
@@ -53,18 +52,30 @@ class ScanDataset(Dataset):
 
             self.df.at[first.values[0], 'alternatives'] = self.df.at[first.values[0], 'alternatives'] + row[
                 'alternatives'] + [row['src_word']]
+        # Shuffle the dataset, if necessary
         if self.shuffle:
             self.df = self.df.sample(frac=1).reset_index(drop=True)
 
-        # Load the examples from file
+        # Process examples from file
+        self.examples_file = examples_file
+        self.examples_shot_nr = examples_shot_nr
+        self.examples_start_idx = examples_start_idx
+
+        self.examples, self.current_examples, self.df_remapped_indices = None, None, None
+
+        self.read_examples(self.examples_file)
+        self.set_examples_to_use_few_shot(self.examples_start_idx, self.examples_shot_nr)
+
+    def read_examples(self, examples_file):
+        self.examples_file = examples_file
         self.examples = {
-            'science': [],
-            'metaphor': []
+           analogy_type: [] for analogy_type in self.df['analogy_type'].unique()
         }
-        with open(SCAN_EXAMPLES_PATH, 'r', encoding='utf8') as f:
+        # Load the examples from file
+        with open(examples_file, 'r', encoding='utf8') as f:
             lines = [line.rstrip() for line in f]
-            nr_examples = round(len(lines) / 3)
-            examples = [lines[idx * 3: (idx * 3) + 2] for idx in range(0, nr_examples)]
+            total_nr_examples = round(len(lines) / 3)
+            examples = [lines[idx * 3: (idx * 3) + 2] for idx in range(0, total_nr_examples)]
             for example in examples:
                 target, source, targ_word, src_word, alternatives, analogy_type = tuple(example[0].split(','))
                 ex = {
@@ -78,17 +89,14 @@ class ScanDataset(Dataset):
                 }
                 self.examples[analogy_type].append(ex)
 
-        self.current_examples = None
-        self.df_remapped_indices = None
-        self.set_current_examples_and_exclude_from_dataset(self.examples_start_idx, self.shot_nr)
-
-    def set_current_examples_and_exclude_from_dataset(self, examples_start_idx, nr_examples):
+    def set_examples_to_use_few_shot(self, examples_start_idx, nr_examples_few_shot):
         self.examples_start_idx = examples_start_idx
-        self.shot_nr = nr_examples
+        self.examples_shot_nr = nr_examples_few_shot
+
         # Get X (=nr_examples) examples starting from the start_idx, for each analogy type
         self.current_examples = []
         for k in self.examples.keys():
-            self.current_examples.extend(self.examples[k][self.examples_start_idx: self.shot_nr])
+            self.current_examples.extend(self.examples[k][self.examples_start_idx: self.examples_shot_nr])
 
         # Remapping the indices in df so that those corresponding to the examples_to_consider are removed.
         # This way, the examples will not be returned when iterating through the df
@@ -124,14 +132,11 @@ class ScanDataset(Dataset):
 if __name__ == '__main__':
     dataset = ScanDataset(
         shuffle=False,
-        shot_nr=1,
-        examples_start_idx=0,
         analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
-        analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL
+        analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
+        examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
+        examples_start_idx=0,
+        examples_shot_nr=1
     )
-    print("Examples are: ")
-    print(dataset.examples)
     for i, sample in tqdm(enumerate(dataset)):
-        print(sample)
-        print("-----")
         print(sample['inference'])
