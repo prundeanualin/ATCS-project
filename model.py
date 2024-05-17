@@ -1,30 +1,35 @@
-import os
-import torch
 from transformers import (AutoTokenizer,
                           pipeline
                           )
 import textwrap
-import argparse
+
+from utils import DummyPipeline
 
 
 class LLMObj:
     def __init__(self, model,
-               model_kwargs,
-               tokenizer_name=None,
-               system_prompt="",
-               ):
-        super(LLMObj, self).__init__()
+                 model_kwargs,
+                 tokenizer_name,
+                 system_prompt="",
+                 # This is used on devices without a GPU, to make sure that the rest of the code runs ok
+                 dummy_pipeline=False
+                 ):
 
-        if tokenizer_name:
-          tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+        # If tokenizer name is empty, then load it based on the model's name
+        if not tokenizer_name:
+            tokenizer_name = model
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
 
-        pipe = pipeline(
-          "text-generation",
-          model=model,
-          tokenizer=tokenizer,
-          model_kwargs=model_kwargs,
-          trust_remote_code=True
-        )
+        if dummy_pipeline:
+            pipe = DummyPipeline(tokenizer)
+        else:
+            pipe = pipeline(
+              "text-generation",
+              model=model,
+              tokenizer=tokenizer,
+              model_kwargs=model_kwargs,
+              trust_remote_code=True
+            )
 
         terminators = [
             pipe.tokenizer.eos_token_id,
@@ -85,8 +90,7 @@ class LLMObj:
             # **generation_kwargs
         )
 
-        generated_outputs = outputs[0]["generated_text"]
-        text = outputs[0]["generated_text"][len(prompt):]
-        wrapped_text = self.wrap_text(text)
+        generated_text = outputs[0]["generated_text"][len(prompt):]
+        wrapped_text = self.wrap_text(generated_text)
         # display(Markdown(wrapped_text))
-        return wrapped_text
+        return generated_text

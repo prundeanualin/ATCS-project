@@ -13,3 +13,4 @@ dependencies:
       - transformers
       - accelerate
       - bitsandbytes
+      - nltk
