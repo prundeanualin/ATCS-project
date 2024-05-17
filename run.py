@@ -14,7 +14,7 @@ from utils import seed_experiments
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Model')
-parser.add_argument('--tokenizer', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Tokenizer')
+parser.add_argument('--tokenizer', type=str, default=None, help="LLM Tokenizer. If not set, will use the HF auto tokenizer loaded from the model's name")
 parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quantization', choices=['None', '4bit'])
 parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CPU Memory usage')
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')

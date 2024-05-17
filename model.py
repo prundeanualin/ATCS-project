@@ -10,13 +10,14 @@ import argparse
 class LLMObj:
     def __init__(self, model,
                model_kwargs,
-               tokenizer_name=None,
+               tokenizer_name,
                system_prompt="",
                ):
-        super(LLMObj, self).__init__()
 
-        if tokenizer_name:
-          tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+        # If tokenizer name is empty, then load it based on the model's name
+        if not tokenizer_name:
+            tokenizer_name = model
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
 
         pipe = pipeline(
           "text-generation",
@@ -85,8 +86,7 @@ class LLMObj:
             # **generation_kwargs
         )
 
-        generated_outputs = outputs[0]["generated_text"]
-        text = outputs[0]["generated_text"][len(prompt):]
-        wrapped_text = self.wrap_text(text)
+        generated_text = outputs[0]["generated_text"][len(prompt):]
+        wrapped_text = self.wrap_text(generated_text)
         # display(Markdown(wrapped_text))
-        return wrapped_text
+        return generated_text
