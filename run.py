@@ -3,6 +3,8 @@ import argparse
 from get_datasets import SCAN_EXAMPLES_FILEPATH, EXAMPLE_CATEGORIES
 from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
 from model import LLMObj
+from evaluate import *
+
 import torch
 from tqdm import tqdm
 from transformers import BitsAndBytesConfig
@@ -10,7 +12,7 @@ import pickle
 from datasets import ScanDataset
 import os
 
-from utils import seed_experiments
+from utils import seed_experiments, SAVE_DIR
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Model')
@@ -18,6 +20,7 @@ parser.add_argument('--tokenizer', type=str, default=None, help="LLM Tokenizer. 
 parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quantization', choices=['None', '4bit'])
 parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CPU Memory usage')
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
+parser.add_argument('--debug', type=bool, default=False, help='If running in debug mode, there will be a dummy pipeline created. No real model inference will hapen!')
 args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
@@ -52,7 +55,8 @@ model_kwargs = {
 LLMObj_args = {
     'model': args.model,
     'model_kwargs': model_kwargs,
-    'tokenizer_name': args.tokenizer
+    'tokenizer_name': args.tokenizer,
+    'dummy_pipeline': args.debug
 }
 print("LLMObj Arguments are:")
 print(LLMObj_args)
@@ -61,10 +65,17 @@ print(LLMObj_args)
 LLM = LLMObj(**LLMObj_args)
 
 # ----- Run inference -----
-generated_prompts = []
+results = []
 for i, sample in tqdm(enumerate(dataset)):
     output = LLM.generate(sample['inference'])
-    generated_prompts.append([sample, output])
+    results.append([sample, output])
 
-with open(f'{args.model.split("/")[1]}_generated_prompts.pl', 'wb') as f:
-    pickle.dump(generated_prompts, f)
+save_file = os.path.join(SAVE_DIR, f'{args.model.split("/")[1]}_generated_prompts.pl')
+with open(save_file, 'wb') as f:
+    pickle.dump(results, f)
+
+# ----- Evaluate -----
+
+# results = pd.read_pickle(f'{args.model.split("/")[1]}_generated_prompts.pl')
+acc_score = evaluate(results, SimpleEvaluationStrategy())
+print(f"Score is {acc_score}%")

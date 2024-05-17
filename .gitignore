@@ -3,3 +3,9 @@
 # Pycharm cache files
 prompt_templates/__pycache__
 __pycache__
+
+# Ignore datasets
+data/SCAN/SCAN_dataset.csv
+
+# Ignore generated output files
+results

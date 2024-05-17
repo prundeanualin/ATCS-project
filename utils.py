@@ -3,6 +3,7 @@ import numpy as np
 import random
 import os
 
+SAVE_DIR = "results"
 
 def seed_experiments(seed):
     """
@@ -22,3 +23,15 @@ def seed_experiments(seed):
 
     random.seed(seed)
     np.random.seed(seed)
+
+
+class DummyPipeline:
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+
+    def __call__(self, prompt, **kwargs):
+        return [
+            {
+                "generated_text": f"{prompt} <fake-assistant> This is a dummy generated text!"
+            }
+        ]
