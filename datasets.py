@@ -2,6 +2,9 @@ from torch.utils.data import Dataset
 import pandas as pd
 import torch
 from tqdm import tqdm
+from itertools import combinations
+import random
+import pickle
 
 from get_datasets import *
 from prompt_templates.analogy import *
@@ -128,15 +131,132 @@ class ScanDataset(Dataset):
             'analogy_type': analogy_type
         }
 
+class BATSDataloader_0shot:
+    def __init__(self, dataFolder, fileName, numberOfAnalogy = False, cot=False, shuffle=False, promptType="by-relation", promptFormat=" If {} is like {}, {} is like ..."):
+        self.dataFolder = dataFolder
+        self.fileName = fileName
+        self.promptFormat = promptFormat
+        start = fileName.find('[') + 1
+        end = fileName.find(']')
+        self.analogyType = fileName[start:end]
+        self.numberOfAnalogy = numberOfAnalogy
+        self.promptType = promptType # promptType: by-relation, by-target-word
+        self.COT = cot
+        self.promptFormat = promptFormat
+        self.shuffle = shuffle
+        self.load_pairs()
+        self.build_prompt()
+
+    def load_pairs(self):
+        '''
+        Output: pairs = [[target, source, alternatives, analogyType], [target, source, alternatives, analogyType], ...]
+        '''
+        with open(f'{self.dataFolder}/{self.fileName}.txt', 'r') as f:
+            lines = f.readlines()
+        self.pairs = []
+        for line in lines:
+            target, values = line.strip().split('\t')
+            values = values.split('/')
+            # remove value that have underscore
+            values = [value for value in values if '_' not in value]
+            # only select the first element in value list as label/attribute, the rest are alternatives
+            source = values[0]
+            alternatives = [value for value in values[1:] if value]
+            self.pairs.append([target, source, alternatives, self.analogyType])
+
+        # # save as csv
+        # with open(f'{self.dataFolder}/{self.fileName}_pairs.csv', 'w') as f:
+        #     writer = csv.writer(f)
+        #     writer.writerow(['target', 'source', 'alternatives', 'analogy_type'])
+        #     writer.writerows(self.pairs)
+
+        # save as pickle
+        if not os.path.exists(f'{self.dataFolder}/pairs'):
+            os.makedirs(f'{self.dataFolder}/pairs')
+        with open(f'{self.dataFolder}/pairs/{self.fileName}.pkl', 'wb') as f:
+            pickle.dump(self.pairs, f)
+
+
+    def build_prompt(self):
+        '''
+        Output:
+        '''
+        self.prompt = []
+        if self.promptType == "by-relation":
+            # combination of 2 pairs and generate prompt
+            for pair in combinations(self.pairs, 2):
+                # check if same analogy type
+                if pair[0][3] != pair[1][3]:
+                    continue
+                inference = self.promptFormat.format(pair[0][0], pair[0][1], pair[1][0])
+                if self.COT:
+                    inference = self.COT + inference
+                self.prompt.append({'inference': inference, 'label': pair[1][1], 'alternatives': pair[1][2], 'analogy_type': pair[0][3]})
+        elif self.promptType == "by-target-word":
+            for pair in combinations(self.pairs, 2):
+                # check if same analogy type
+                if pair[0][3] != pair[1][3]:
+                    continue
+                inference = self.promptFormat.format(pair[0][0], pair[1][0], pair[0][1])
+                if self.COT:
+                    inference = self.COT + inference
+                self.prompt.append({'inference': inference, 'label': pair[1][1], 'alternatives': pair[1][2], 'analogy_type': pair[0][3]})
+        else:
+            print("Invalid prompt type. Either by-relation or by-target-word")
+
+        fname = self.get_file_name()
+        
+        # # save as csv
+        # with open(f'{self.dataFolder}/{fname}.csv', 'w') as f:
+        #     writer = csv.DictWriter(f, fieldnames=self.prompt[0].keys())
+        #     writer.writeheader()
+        #     writer.writerows(self.prompt)
+
+        # save as pickle
+        if not os.path.exists(f'{self.dataFolder}/prompt'):
+            os.makedirs(f'{self.dataFolder}/prompt')
+        with open(f'{self.dataFolder}/prompt/{fname}.pkl', 'wb') as f:
+            pickle.dump(self.prompt, f)
+
+    def get_file_name(self):
+        prompt_condition = self.promptFormat.split(",")[0]
+        return f"0shot_{self.fileName}_{self.COT if self.COT else 'no_COT'}_{self.promptType}_{prompt_condition}"
+
+    def __call__(self):
+        if self.shuffle:
+            random.shuffle(self.prompt)
+        # return only the number of analogy specified (if does not exceed the total number of analogy)
+        if self.numberOfAnalogy and self.numberOfAnalogy < len(self.pairs):
+            return self.prompt[:self.numberOfAnalogy]
+        return self.prompt
 
 if __name__ == '__main__':
-    dataset = ScanDataset(
-        shuffle=False,
-        analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
-        analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
-        examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
-        examples_start_idx=0,
-        examples_shot_nr=1
+    # dataset = ScanDataset(
+    #     shuffle=False,
+    #     analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+    #     analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
+    #     examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
+    #     examples_start_idx=0,
+    #     examples_shot_nr=1
+    # )
+    # for i, sample in tqdm(enumerate(dataset)):
+    #     print(sample['inference'])
+
+    BATS_dataset = BATSDataloader_0shot(
+        BATS_FOLDER, 
+        BATS_FILENAME, 
+        numberOfAnalogy = 2, 
+        cot = COT_TEMPLATE,
+        shuffle = False,
+        promptType='by-relation', 
+        promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE
     )
-    for i, sample in tqdm(enumerate(dataset)):
+
+    # print(BATS_dataset.get_file_name()) # 0shot_L01 [hypernyms - animals] sample_Thinking step by step. _by-relation_If {} is like {}
+
+    for id, sample in enumerate(BATS_dataset()):
         print(sample['inference'])
+        print(sample['label'])
+        print(sample['alternatives'])
+        print(sample['analogy_type'])
+        print()

@@ -1,0 +1,3 @@
+allosaurus	dinosaur/reptile/bird/archosaur/archosaurian/archosaurian_reptile/
+anaconda	snake/reptile/boa/serpent/ophidian
+ant	insect/invertebrate/

@@ -14,6 +14,10 @@ SCAN_DATASET_URL = "https://raw.githubusercontent.com/taczin/SCAN_analogies/main
 EXAMPLE_CATEGORIES = ["baseline"]
 
 
+# For BATS dataset
+BATS_FOLDER = 'data/BATS'
+
+
 def get_datasets_if_not_present():
     # For SCAN
     if os.path.exists(SCAN_DATASET_FILEPATH):
