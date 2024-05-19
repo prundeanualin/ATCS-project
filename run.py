@@ -68,17 +68,24 @@ LLM = LLMObj(**LLMObj_args)
 
 # ----- Run inference -----
 results = []
+results_buffer_save = []
+
+results_filename = f'{args.model.split("/")[1]}'
+if args.save_filename_details:
+    results_filename += f'_{args.save_filename_details}'
+results_size_to_write = 100
+
 for i, sample in tqdm(enumerate(dataset)):
     if args.debug and i >= 5:
         debug_print("Stopping at five points from the dataset")
         break
     output = LLM.generate(sample['inference'])
     results.append([sample, output])
+    results_buffer_save.append([sample, output])
+    if len(results_buffer_save) == results_size_to_write:
+        save_results(results_buffer_save, results_filename)
+        results_buffer_save = []
 
-results_filename = f'{args.model.split("/")[1]}'
-if args.save_filename_details:
-    results_filename += f'_{args.save_filename_details}'
-save_results(results, results_filename)
 
 # ----- Evaluate -----
 

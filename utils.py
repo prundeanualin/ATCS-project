@@ -35,12 +35,12 @@ def debug_print(msg):
 def save_results(results, filename):
     detailed_save_file = os.path.join(SAVE_DIR, f'{filename}.pl')
     readable_save_file = os.path.join(SAVE_DIR, f'{filename}.txt')
-    with open(detailed_save_file, 'wb') as f:
+    with open(detailed_save_file, 'ab') as f:
         pickle.dump(results, f)
-    with open(readable_save_file, 'w') as f:
+    with open(readable_save_file, 'a') as f:
         for sample, output in results:
-            f.write("Inference: " + sample['inference'] + '\n')
-            f.write(f"Label & alternatives: {sample['label']} - {sample['alternatives']}" + '\n')
+            f.write("Inference:             " + sample['inference'] + '\n')
+            f.write(f"Label & alternatives:  {sample['label']} - {sample['alternatives']}" + '\n')
             f.write(output + '\n')
             f.write('\n')
 
