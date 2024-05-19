@@ -28,7 +28,8 @@ class LLMObj:
               model=model,
               tokenizer=tokenizer,
               model_kwargs=model_kwargs,
-              trust_remote_code=True
+              trust_remote_code=True,
+              device_map="auto"
             )
 
         terminators = [

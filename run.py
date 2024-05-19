@@ -74,6 +74,7 @@ LLM = LLMObj(**LLMObj_args)
 
 # ----- Run inference -----
 results = []
+durations = []
 results_filename = f'{args.model.split("/")[1]}'
 if args.save_filename_details:
     results_filename += f'_{args.save_filename_details}'
@@ -89,8 +90,11 @@ for i, sample in tqdm(enumerate(dataset)):
     results.append([sample, output])
     end = time.time()
     duration = end - start
+    durations.append(duration)
     print(f"Iteration {i}/{len(dataset)}: %.2f sec" % duration)
 
+d = np.array(durations)
+print("Inference duration: avg - %.2f, max - %.2f, min - %.2f" % (d.mean(), d.max(), d.min()))
 save_results(results, results_filename)
 
 # ----- Evaluate -----
