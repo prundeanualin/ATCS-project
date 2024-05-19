@@ -6,8 +6,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=01:00:00
-#SBATCH --output=/home/scur0248/jobs/output/success/out-%x.%A.out
-#SBATCH --error=/home/scur0248/jobs/output/error/out-%x.%A.err
+#SBATCH --output=/home/scur0248/output/success/out-%x.%A.out
+#SBATCH --error=/home/scur0248/output/error/out-%x.%A.err
 
 module purge
 # The default modules for deep learning
@@ -15,5 +15,5 @@ module load 2022
 module load Anaconda3/2022.05
 
 # Go to the directory that contains the conda env file and install it
-cd $HOME/project/ATCS
+cd $HOME/project/ATCS-project
 conda env create -f environment.yaml

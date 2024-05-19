@@ -15,6 +15,6 @@ module load 2022
 module load Anaconda3/2022.05
 
 # Go to the directory that contains the home project and make sure it prints the location fine
-cd $HOME/project/ATCS
+cd $HOME/project/ATCS-project
 echo "Hello World in cluster"
 echo "$PWD"
