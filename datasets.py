@@ -31,6 +31,7 @@ class ScanDataset(Dataset):
         self.analogy_sentence_inference = analogy_sentence_infer
         self.analogy_sentence_example = analogy_sentence_full
         self.shuffle = shuffle
+        self.length = 0
 
         get_datasets_if_not_present()
 
@@ -52,6 +53,7 @@ class ScanDataset(Dataset):
 
             self.df.at[first.values[0], 'alternatives'] = self.df.at[first.values[0], 'alternatives'] + row[
                 'alternatives'] + [row['src_word']]
+
         # Shuffle the dataset, if necessary
         if self.shuffle:
             self.df = self.df.sample(frac=1).reset_index(drop=True)
@@ -108,24 +110,29 @@ class ScanDataset(Dataset):
             indices_examples.append(idx.values[0])
         for ex_i in indices_examples:
             self.df_remapped_indices.pop(ex_i)
+        self.length = int(len(self.df_remapped_indices))
 
     def __len__(self):
-        return int(len(self.df_remapped_indices))
+        return self.length
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
         idx = self.df_remapped_indices[idx]
-        analogy_sent = self.df.iloc[idx, :3].values.tolist()
-        label = self.df.iloc[idx, 3]
-        alternatives = self.df.iloc[idx, 4]
-        analogy_type = self.df.iloc[idx, 5]
+        item = self.df.iloc[idx]
+
+        # return {
+        #     'inference': self.analogy_sentence_inference.format(item['source'], item['src_word'], item['target']),
+        #     'label': item['targ_word'],
+        #     'alternatives': item['alternatives'],
+        #     'analogy_type': item['analogy_type']
+        # }
 
         return {
-            'inference': self.analogy_sentence_inference.format(*analogy_sent),
-            'label': label,
-            'alternatives': alternatives,
-            'analogy_type': analogy_type
+            'inference': self.analogy_sentence_inference.format(item['target'], item['source'], item['targ_word']),
+            'label': item['src_word'],
+            'alternatives': item['alternatives'],
+            'analogy_type': item['analogy_type']
         }
 
 

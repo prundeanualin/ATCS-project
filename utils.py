@@ -43,6 +43,7 @@ def save_results(results, filename):
             f.write(f"Label & alternatives:  {sample['label']} - {sample['alternatives']}" + '\n')
             f.write(output + '\n')
             f.write('\n')
+    print("Saved results in file")
 
 
 class DummyPipeline:
