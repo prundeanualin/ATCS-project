@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=UpdateEnvironment
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=01:00:00
+#SBATCH --output=/home/scur0248/jobs/output/success/out-%x.%A.out
+#SBATCH --error=/home/scur0248/jobs/output/error/out-%x.%A.err
+
+module purge
+# The default modules for deep learning
+module load 2022
+module load Anaconda3/2022.05
+
+# Go to the directory that contains the conda env file and install it
+cd $HOME/project/ATCS
+# Activate your environment
+source activate ATCS-project
+# Update the environment with the latest file version of the env file
+conda env update -f environment.yaml
