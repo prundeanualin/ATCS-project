@@ -39,10 +39,11 @@ def save_results(results, filename):
         pickle.dump(results, f)
     with open(readable_save_file, 'a') as f:
         for sample, output in results:
-            f.write("Inference:             " + sample['inference'] + '\n')
-            f.write(f"Label & alternatives:  {sample['label']} - {sample['alternatives']}" + '\n')
+            f.write("- Inference:             " + sample['inference'] + '\n')
+            f.write(f"- Label & alternatives:  {sample['label']} - {sample['alternatives']}" + '\n')
+            f.write(f"- Generated:\n")
             f.write(output + '\n')
-            f.write('\n')
+            f.write('\n----------------\n\n')
     print("Saved results in file")
 
 
@@ -51,6 +52,7 @@ class DummyPipeline:
         self.tokenizer = tokenizer
 
     def __call__(self, prompt, **kwargs):
+        print(prompt)
         return [
             {
                 "generated_text": f"{prompt} <fake-assistant> This is a dummy generated text!"
