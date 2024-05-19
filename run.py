@@ -7,7 +7,6 @@ from evaluate import *
 
 from tqdm import tqdm
 from transformers import BitsAndBytesConfig
-import pickle
 from datasets import ScanDataset
 
 from utils import *
@@ -20,6 +19,7 @@ parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CP
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 parser.add_argument('--debug', type=bool, default=False, help='If running in debug mode, there will only be considered a few number of entries from the dataset!')
 parser.add_argument('--run_on_cpu', type=bool, default=False, help='If running on cpu, there will be a dummy pipeline created. No real model inference will hapen!')
+parser.add_argument('--save_filename_details', type=str, default=None, help='Adds more details to the save filename.')
 args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
@@ -75,9 +75,10 @@ for i, sample in tqdm(enumerate(dataset)):
     output = LLM.generate(sample['inference'])
     results.append([sample, output])
 
-save_file = os.path.join(SAVE_DIR, f'{args.model.split("/")[1]}_generated_prompts.pl')
-with open(save_file, 'wb') as f:
-    pickle.dump(results, f)
+results_filename = f'{args.model.split("/")[1]}'
+if args.save_filename_details:
+    results_filename += f'_{args.save_filename_details}'
+save_results(results, results_filename)
 
 # ----- Evaluate -----
 
