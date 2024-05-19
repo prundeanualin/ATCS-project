@@ -69,8 +69,8 @@ LLM = LLMObj(**LLMObj_args)
 # ----- Run inference -----
 results = []
 for i, sample in tqdm(enumerate(dataset)):
-    if args.debug and i > 3:
-        debug_print("Stopping at three points from the dataset")
+    if args.debug and i >= 5:
+        debug_print("Stopping at five points from the dataset")
         break
     output = LLM.generate(sample['inference'])
     results.append([sample, output])
