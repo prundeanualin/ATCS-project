@@ -4,6 +4,8 @@ import random
 import os
 
 SAVE_DIR = "results"
+if not os.path.exists(SAVE_DIR):
+    os.mkdir(SAVE_DIR)
 
 def seed_experiments(seed):
     """
@@ -24,6 +26,9 @@ def seed_experiments(seed):
     random.seed(seed)
     np.random.seed(seed)
 
+
+def debug_print(msg):
+    print("[!! DEBUG !!] " + msg)
 
 class DummyPipeline:
     def __init__(self, tokenizer):
