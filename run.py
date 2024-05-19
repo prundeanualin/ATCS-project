@@ -67,6 +67,8 @@ LLM = LLMObj(**LLMObj_args)
 # ----- Run inference -----
 results = []
 for i, sample in tqdm(enumerate(dataset)):
+    if i > 3:
+        break
     output = LLM.generate(sample['inference'])
     results.append([sample, output])
 

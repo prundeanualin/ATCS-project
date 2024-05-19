@@ -18,4 +18,4 @@ source activate ATCS-project
 
 # Go to the directory that contains the project, the runnable
 cd $HOME/project/ATCS-project
-python run.py
+srun python -u run.py
