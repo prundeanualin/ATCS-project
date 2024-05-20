@@ -121,19 +121,19 @@ class ScanDataset(Dataset):
         idx = self.df_remapped_indices[idx]
         item = self.df.iloc[idx]
 
-        return {
-            'inference': self.analogy_sentence_inference.format(item['target'], item['targ_word'], item['source']),
-            'label': item['src_word'],
-            'alternatives': item['alternatives'],
-            'analogy_type': item['analogy_type']
-        }
-
         # return {
-        #     'inference': self.analogy_sentence_inference.format(item['target'], item['source'], item['targ_word']),
+        #     'inference': self.analogy_sentence_inference.format(item['target'], item['targ_word'], item['source']),
         #     'label': item['src_word'],
         #     'alternatives': item['alternatives'],
         #     'analogy_type': item['analogy_type']
         # }
+
+        return {
+            'inference': self.analogy_sentence_inference.format(item['target'], item['source'], item['targ_word']),
+            'label': item['src_word'],
+            'alternatives': item['alternatives'],
+            'analogy_type': item['analogy_type']
+        }
 
 
 if __name__ == '__main__':
