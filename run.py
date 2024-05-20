@@ -22,8 +22,11 @@ parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quanti
 parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CPU Memory usage')
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 parser.add_argument('--debug', type=bool, default=False, help='If running in debug mode, there will be a dummy pipeline created. No real model inference will hapen!')
-parser.add_argument('--dataset', type=str, default='SCAN', help='Dataset to use for inference', choices=['SCAN', 'BATS'])
+parser.add_argument('--dataset', type=str, default='BATS', help='Dataset to use for inference', choices=['SCAN', 'BATS'])
 parser.add_argument('--BATS_filename', type=str, default='L01 [hypernyms - animals] sample', help='BATS filename to use for inference')
+parser.add_argument('--prompt_structure', type=str, default='by-relation', help='Prompt structure, e.g. if A is B (by-relation) or if A is C (by-target-word)', choices=['by-relation', 'by-target-word'])
+parser.add_argument('--COT_template', default = False, type=lambda x: False if x.lower() == 'false' else x, help='If True, will use COT template')
+parser.add_argument('--number_of_analogy', default = False, type=lambda x: False if x.lower() == 'false' else int(x), help='Number of analogy to do inference on')
 args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
@@ -48,19 +51,17 @@ if args.dataset == 'SCAN':
         examples_shot_nr=1
     )
 elif args.dataset == 'BATS':
-    BATS_FILENAME = args.BATS_filename
     BATS_dataset = BATSDataloader_0shot(
-        BATS_FOLDER, 
-        BATS_FILENAME, 
-        numberOfAnalogy = 2, 
-        cot = COT_TEMPLATE,
-        shuffle = False,
-        promptType='by-relation', 
+        dataFolder = BATS_FOLDER,
+        fileName = args.BATS_filename,
+        numberOfAnalogy=args.number_of_analogy,
+        cot = args.COT_template,
+        shuffle = True,
+        promptType = args.prompt_structure,
         promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE
     )
 else:
     raise ValueError("Dataset not supported")
-
 
 # ----- Prepare model arguments -----
 quantization = None
