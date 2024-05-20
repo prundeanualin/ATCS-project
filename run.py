@@ -95,10 +95,15 @@ for i, sample in tqdm(enumerate(dataset)):
 
 d = np.array(durations)
 print("Inference duration: avg - %.2f, max - %.2f, min - %.2f" % (d.mean(), d.max(), d.min()))
-save_results(results, results_filename)
 
 # ----- Evaluate -----
 print("-- Evaluating the model --")
 # results = pd.read_pickle(f'{args.model.split("/")[1]}_generated_prompts.pl')
 acc_score = evaluate(results, SimpleEvaluationStrategy())
 print(f"Score is {acc_score}%")
+
+evaluation_metrics = {
+    "acc": acc_score
+}
+
+save_results(results, evaluation_metrics, results_filename)

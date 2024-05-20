@@ -32,7 +32,7 @@ def debug_print(msg):
     print("[!! DEBUG !!] " + msg)
 
 
-def save_results(results, filename):
+def save_results(results, evaluation_metrics, filename):
     detailed_save_file = os.path.join(SAVE_DIR, f'{filename}.pl')
     readable_save_file = os.path.join(SAVE_DIR, f'{filename}.txt')
     with open(detailed_save_file, 'ab') as f:
@@ -44,6 +44,9 @@ def save_results(results, filename):
             f.write(f"- Generated:\n")
             f.write(output + '\n')
             f.write('\n----------------\n\n')
+        f.write("### Evaluation metrics:\n")
+        for metric in evaluation_metrics:
+            f.write(f"- {metric}: {evaluation_metrics[metric]}\n")
     print("Saved results in file")
 
 
