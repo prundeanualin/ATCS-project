@@ -105,6 +105,7 @@ class ScanDataset(Dataset):
 
         # Remapping the indices in df so that those corresponding to the examples_to_consider are removed.
         # This way, the examples will not be returned when iterating through the df
+        self.df_remapped_indices = [i for i in range(len(self.df))]
         indices_examples = []
         for ex in self.current_examples:
             idx = self.df[(self.df['source'] == ex['source']) & (self.df['target'] == ex['target']) &
