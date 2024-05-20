@@ -46,6 +46,7 @@ class ScanDataset(Dataset):
         # be the case since then the second instance should be part of the first's alternatives
         last_doubled = self.df[self.df.duplicated(subset=['source', 'target', 'targ_word'], keep='last')]
         self.df.drop(last_doubled.index, axis=0, inplace=True)
+        self.df.reset_index(inplace=True)
 
         for _, row in last_doubled.iterrows():
             first = self.df[(self.df['source'] == row['source']) & (self.df['target'] == row['target']) & (
@@ -98,18 +99,19 @@ class ScanDataset(Dataset):
         # Get X (=nr_examples) examples starting from the start_idx, for each analogy type
         self.current_examples = []
         for k in self.examples.keys():
-            self.current_examples.extend(self.examples[k][self.examples_start_idx: self.examples_shot_nr])
+            self.current_examples.extend(self.examples[k]
+                                         [self.examples_start_idx: self.examples_start_idx + self.examples_shot_nr]
+                                         )
 
         # Remapping the indices in df so that those corresponding to the examples_to_consider are removed.
         # This way, the examples will not be returned when iterating through the df
-        self.df_remapped_indices = [i for i in range(len(self.df))]
         indices_examples = []
         for ex in self.current_examples:
-            idx = self.df[(self.df['source'] == ex['source']) & (self.df['target'] == ex['target']) & (
-                    self.df['targ_word'] == ex['targ_word']) & (self.df['src_word'] == ex['src_word'])].index
+            idx = self.df[(self.df['source'] == ex['source']) & (self.df['target'] == ex['target']) &
+                          (self.df['targ_word'] == ex['targ_word']) & (self.df['src_word'] == ex['src_word'])].index
             indices_examples.append(idx.values[0])
-        for ex_i in indices_examples:
-            self.df_remapped_indices.pop(ex_i)
+
+        self.df_remapped_indices = [i for i in range(len(self.df)) if i not in indices_examples]
         self.length = int(len(self.df_remapped_indices))
 
     def __len__(self):
@@ -118,8 +120,8 @@ class ScanDataset(Dataset):
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
-        idx = self.df_remapped_indices[idx]
-        item = self.df.iloc[idx]
+        actual_idx = self.df_remapped_indices[idx]
+        item = self.df.iloc[actual_idx]
 
         # return {
         #     'inference': self.analogy_sentence_inference.format(item['target'], item['targ_word'], item['source']),
@@ -142,8 +144,12 @@ if __name__ == '__main__':
         analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
         analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
         examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
-        examples_start_idx=0,
-        examples_shot_nr=1
+        examples_start_idx=5,
+        examples_shot_nr=5
     )
+    print("Examples are:")
+    for ex in dataset.current_examples:
+        print(ex['simple'])
+    print("\n\n")
     for i, sample in tqdm(enumerate(dataset)):
-        print(sample['inference'])
+        print(sample['inference'] + "  -- " + sample['label'])
