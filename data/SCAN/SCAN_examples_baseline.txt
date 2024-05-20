@@ -74,7 +74,7 @@ bacterial mutation,slot machine,mutating,spinning,,science
 The slot machine in action is spinning. Following the same logic for the bacterial mutation, the bacterial mutation in action is mutating. So the answer is mutating.
 
 accepting a belief,buying an item,believer,buyer,,metaphor
-The believer is the agent that does the act of buying an item. Following the same logic, the believer is the agent who does the act of accepting a belief. So the answer is believer.
+The buyer is the agent that does the act of buying an item. Following the same logic, the believer is the agent who does the act of accepting a belief. So the answer is believer.
 
 accepting a belief,buying an item,belief,merchandise,,metaphor
 Merchandise describes the element that is directly involved in the act of buying an item. Following the same logic, the belief describes the element that is directly involved in the act of accepting a belief. So the answer is belief.
