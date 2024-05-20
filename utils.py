@@ -52,7 +52,6 @@ class DummyPipeline:
         self.tokenizer = tokenizer
 
     def __call__(self, prompt, **kwargs):
-        print(prompt)
         return [
             {
                 "generated_text": f"{prompt} <fake-assistant> This is a dummy generated text!"

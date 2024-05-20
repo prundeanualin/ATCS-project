@@ -122,8 +122,8 @@ class ScanDataset(Dataset):
         item = self.df.iloc[idx]
 
         return {
-            'inference': self.analogy_sentence_inference.format(item['source'], item['src_word'], item['target']),
-            'label': item['targ_word'],
+            'inference': self.analogy_sentence_inference.format(item['target'], item['targ_word'], item['source']),
+            'label': item['src_word'],
             'alternatives': item['alternatives'],
             'analogy_type': item['analogy_type']
         }
