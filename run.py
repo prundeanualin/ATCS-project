@@ -93,6 +93,7 @@ for i, sample in enumerate(dataloader):
         prompt = prompt.format(*map(lambda x: x['simple'], sample['examples']))
 
     output = LLM.generate(prompt)
+    del sample['examples']
     results.append([sample, output])
     end = time.time()
     duration = end - start
@@ -104,7 +105,6 @@ print("Inference duration: avg - %.2f, max - %.2f, min - %.2f" % (d.mean(), d.ma
 
 # ----- Evaluate -----
 print("-- Evaluating the model --")
-# results = pd.read_pickle(f'{args.model.split("/")[1]}_generated_prompts.pl')
 acc_score = evaluate(results, SimpleEvaluationStrategy())
 print(f"Score is {acc_score}%")
 

@@ -105,7 +105,6 @@ class ScanDataloader:
         for i in range(self.examples_shot_nr):
             ex = random.choice(self.examples[item['analogy_type']])
             while is_example_equal_to_sample(item, ex):
-                print("Example same as sample, getting another one")
                 ex = random.choice(self.examples[item['analogy_type']])
             examples.append(ex)
 
@@ -136,10 +135,10 @@ if __name__ == '__main__':
     print("Is example equal to sample: ")
     initial_elem = dataset.df.iloc[5]
     elem = dataset.df.iloc[11]
-    print(is_example_equal_to_sample(initial_elem, elem))
+    assert not is_example_equal_to_sample(initial_elem, elem)
     elem['target'] = initial_elem['target']
     elem['source'] = initial_elem['source']
     elem['targ_word'] = initial_elem['targ_word']
     elem['src_word'] = initial_elem['src_word']
-    print(is_example_equal_to_sample(dataset.df.iloc[5], dataset.df.iloc[5]))
+    assert is_example_equal_to_sample(dataset.df.iloc[5], dataset.df.iloc[5])
 
