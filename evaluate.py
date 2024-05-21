@@ -17,7 +17,7 @@ class SimpleEvaluationStrategy(EvaluationStrategy):
 
     def evaluate(self, generated_text: str, label: str, alternative_labels: list[str]):
         labels = alternative_labels + [label]
-        # TODO: the output string tokenization should be tested for the best one
+        # TODO: maybe also test other tokenization strategies
         generated_words = nltk.word_tokenize(generated_text)
         for w in generated_words:
             if w in labels:

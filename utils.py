@@ -2,8 +2,11 @@ import torch
 import numpy as np
 import random
 import os
+import pickle
 
 SAVE_DIR = "results"
+if not os.path.exists(SAVE_DIR):
+    os.mkdir(SAVE_DIR)
 
 def seed_experiments(seed):
     """
@@ -23,6 +26,24 @@ def seed_experiments(seed):
 
     random.seed(seed)
     np.random.seed(seed)
+
+
+def save_results(results, evaluation_metrics, filename):
+    detailed_save_file = os.path.join(SAVE_DIR, f'{filename}.pl')
+    readable_save_file = os.path.join(SAVE_DIR, f'{filename}.txt')
+    with open(detailed_save_file, 'wb') as f:
+        pickle.dump(results, f)
+    with open(readable_save_file, 'w') as f:
+        for sample, output in results:
+            f.write("- Inference:             " + sample['inference'] + '\n')
+            f.write(f"- Label & alternatives:  {sample['label']} - {sample['alternatives']}" + '\n')
+            f.write(f"- Generated:\n")
+            f.write(output + '\n')
+            f.write('\n----------------\n\n')
+        f.write("### Evaluation metrics:\n")
+        for metric in evaluation_metrics:
+            f.write(f"- {metric}: {evaluation_metrics[metric]}\n")
+    print("Saved results in file")
 
 
 class DummyPipeline:

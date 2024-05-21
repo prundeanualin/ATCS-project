@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_mig
+#SBATCH --gpus=1
+#SBATCH --job-name=HelloWorld
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=00:02:00
+#SBATCH --output=/home/scur0248/output/success/out-%x.%A.out
+#SBATCH --error=/home/scur0248/output/error/out-%x.%A.err
+
+module purge
+# The default modules for deep learning
+module load 2022
+module load Anaconda3/2022.05
+
+# Go to the directory that contains the home project and make sure it prints the location fine
+cd $HOME/project/ATCS-project
+echo "Hello World in cluster"
+echo "$PWD"
