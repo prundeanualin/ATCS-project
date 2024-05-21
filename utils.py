@@ -28,10 +28,6 @@ def seed_experiments(seed):
     np.random.seed(seed)
 
 
-def debug_print(msg):
-    print("[!! DEBUG !!] " + msg)
-
-
 def save_results(results, evaluation_metrics, filename):
     detailed_save_file = os.path.join(SAVE_DIR, f'{filename}.pl')
     readable_save_file = os.path.join(SAVE_DIR, f'{filename}.txt')

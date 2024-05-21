@@ -86,8 +86,9 @@ class LLMObj:
             pad_token_id=self.pipe.tokenizer.pad_token_id,
             eos_token_id=self.terminators,
             do_sample=False,
-            temperature=0.0,
-            top_p=0.9,
+            # These are set only for the non-deterministic scenario with do_sample=True
+            # temperature=0.0,
+            # top_p=0.9,
             # **generation_kwargs
         )
 

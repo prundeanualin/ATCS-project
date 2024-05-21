@@ -6,7 +6,6 @@ from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_
 from model import LLMObj
 from evaluate import *
 
-from tqdm import tqdm
 from transformers import BitsAndBytesConfig
 from datasets import ScanDataloader
 
@@ -21,7 +20,7 @@ parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CP
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 parser.add_argument('--save_filename_details', type=str, default=None, help='Adds more details to the save filename.')
 
-parser.add_argument('--mode', type=str, default='train', choices=['train', 'validation'], help='If running in validation mode, there will only be considered a few number of entries from the dataset!')
+parser.add_argument('--limit_nr_analogies', type=int, default=-1, help='There will only be considered a specific number of entries from the dataset!')
 parser.add_argument('--run_on_cpu', type=bool, default=False, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
 
 # Controlling the one-shot/few-shot behaviours
@@ -31,8 +30,6 @@ parser.add_argument('--analogy_type', type=str, default='science', help='Analogy
 args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
-
-debug_print(f"Running in {args.mode} mode")
 
 os.environ['HF_TOKEN'] = "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"
 os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '1'
@@ -49,7 +46,6 @@ dataloader = ScanDataloader(
     examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
     examples_shot_nr=args.n_shot
 )
-NUM_VALIDATION_SAMPLES = int(len(dataloader) / 10)
 
 # ----- Prepare model arguments -----
 quantization = None
@@ -85,8 +81,8 @@ print("-- Running the model --")
 
 for i, sample in enumerate(dataloader):
     start = time.time()
-    if args.mode == 'validation' and i == NUM_VALIDATION_SAMPLES:
-        debug_print(f"Stopping at the first {NUM_VALIDATION_SAMPLES} points from the dataset")
+    if 0 < args.limit_nr_analogies == i:
+        print(f"Stopping at the first {args.limit_nr_analogies} points from the dataset")
         break
 
     prompt = sample['inference']
