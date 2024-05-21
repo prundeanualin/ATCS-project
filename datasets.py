@@ -1,7 +1,6 @@
-from torch.utils.data import Dataset
 import pandas as pd
 import torch
-from tqdm import tqdm
+import random
 
 from get_datasets import *
 from prompt_templates.analogy import *
@@ -14,20 +13,26 @@ def get_list_alternatives(alternatives):
         return alternatives.split(', ')
 
 
-class ScanDataset(Dataset):
+def is_example_equal_to_sample(sample, ex):
+    return ((sample['source'] == ex['source']) and
+            (sample['target'] == ex['target']) and
+            (sample['targ_word'] == ex['targ_word']) and
+            (sample['src_word'] == ex['src_word']))
+
+
+class ScanDataloader:
     def __init__(self,
                  shuffle=False,
                  analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
                  analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
+                 dataset_file=SCAN_DATASET_FILEPATH,
                  examples_file=SCAN_EXAMPLES_FILEPATH,
-                 examples_start_idx=0,
                  examples_shot_nr=1):
         """
             - examples_start_idx: needs to be within the range of available examples per analogy type.
                 For the current SCAN setup, this means 25 examples per analogy type.
             - shot_nr: number of examples to be considered from each analogy type
         """
-
         self.analogy_sentence_inference = analogy_sentence_infer
         self.analogy_sentence_example = analogy_sentence_full
         self.shuffle = shuffle
@@ -36,7 +41,7 @@ class ScanDataset(Dataset):
         get_datasets_if_not_present()
 
         # Load the dataset from file
-        with open(SCAN_DATASET_FILEPATH, 'r', encoding='utf8') as f:
+        with open(dataset_file, 'r', encoding='utf8') as f:
             self.df = pd.read_csv(f, sep=',', index_col=False)
 
         # Transform alternatives into list of strings. If none is provided, then use an empty list
@@ -60,17 +65,11 @@ class ScanDataset(Dataset):
             self.df = self.df.sample(frac=1).reset_index(drop=True)
 
         # Process examples from file
-        self.examples_file = examples_file
         self.examples_shot_nr = examples_shot_nr
-        self.examples_start_idx = examples_start_idx
-
-        self.examples, self.current_examples, self.df_remapped_indices = None, None, None
-
-        self.read_examples(self.examples_file)
-        self.set_examples_to_use_few_shot(self.examples_start_idx, self.examples_shot_nr)
+        self.examples = None
+        self.read_examples(examples_file)
 
     def read_examples(self, examples_file):
-        self.examples_file = examples_file
         self.examples = {
            analogy_type: [] for analogy_type in self.df['analogy_type'].unique()
         }
@@ -92,65 +91,55 @@ class ScanDataset(Dataset):
                 }
                 self.examples[analogy_type].append(ex)
 
-    def set_examples_to_use_few_shot(self, examples_start_idx, nr_examples_few_shot):
-        self.examples_start_idx = examples_start_idx
-        self.examples_shot_nr = nr_examples_few_shot
-
-        # Get X (=nr_examples) examples starting from the start_idx, for each analogy type
-        self.current_examples = []
-        for k in self.examples.keys():
-            self.current_examples.extend(self.examples[k]
-                                         [self.examples_start_idx: self.examples_start_idx + self.examples_shot_nr]
-                                         )
-
-        # Remapping the indices in df so that those corresponding to the examples_to_consider are removed.
-        # This way, the examples will not be returned when iterating through the df
-        self.df_remapped_indices = [i for i in range(len(self.df))]
-        indices_examples = []
-        for ex in self.current_examples:
-            idx = self.df[(self.df['source'] == ex['source']) & (self.df['target'] == ex['target']) &
-                          (self.df['targ_word'] == ex['targ_word']) & (self.df['src_word'] == ex['src_word'])].index
-            indices_examples.append(idx.values[0])
-
-        self.df_remapped_indices = [i for i in range(len(self.df)) if i not in indices_examples]
-        self.length = int(len(self.df_remapped_indices))
-
     def __len__(self):
-        return self.length
+        return len(self.df)
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
-        actual_idx = self.df_remapped_indices[idx]
-        item = self.df.iloc[actual_idx]
+        item = self.df.iloc[idx]
 
-        # return {
-        #     'inference': self.analogy_sentence_inference.format(item['target'], item['targ_word'], item['source']),
-        #     'label': item['src_word'],
-        #     'alternatives': item['alternatives'],
-        #     'analogy_type': item['analogy_type']
-        # }
+        # Load shot_nr random examples from the same analogy category,
+        # while making sure they are different from the sample
+        examples = []
+        for i in range(self.examples_shot_nr):
+            ex = random.choice(self.examples[item['analogy_type']])
+            while is_example_equal_to_sample(item, ex):
+                print("Example same as sample, getting another one")
+                ex = random.choice(self.examples[item['analogy_type']])
+            examples.append(ex)
 
         return {
             'inference': self.analogy_sentence_inference.format(item['target'], item['source'], item['targ_word']),
             'label': item['src_word'],
             'alternatives': item['alternatives'],
-            'analogy_type': item['analogy_type']
+            'analogy_type': item['analogy_type'],
+            'examples': examples
         }
 
 
 if __name__ == '__main__':
-    dataset = ScanDataset(
+    dataset = ScanDataloader(
         shuffle=False,
         analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
         analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
         examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
-        examples_start_idx=5,
-        examples_shot_nr=5
+        examples_shot_nr=8
     )
-    print("Examples are:")
-    for ex in dataset.current_examples:
-        print(ex['simple'])
-    print("\n\n")
-    for i, sample in tqdm(enumerate(dataset)):
+    for i, sample in enumerate(dataset):
         print(sample['inference'] + "  -- " + sample['label'])
+        for ex in sample['examples']:
+            print(ex['simple'])
+        print("----\n")
+
+    # Test is_example_equal_to_sample method
+    print("Is example equal to sample: ")
+    initial_elem = dataset.df.iloc[5]
+    elem = dataset.df.iloc[11]
+    print(is_example_equal_to_sample(initial_elem, elem))
+    elem['target'] = initial_elem['target']
+    elem['source'] = initial_elem['source']
+    elem['targ_word'] = initial_elem['targ_word']
+    elem['src_word'] = initial_elem['src_word']
+    print(is_example_equal_to_sample(dataset.df.iloc[5], dataset.df.iloc[5]))
+
