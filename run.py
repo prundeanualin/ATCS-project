@@ -20,12 +20,18 @@ parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CP
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 parser.add_argument('--save_filename_details', type=str, default=None, help='Adds more details to the save filename.')
 
-parser.add_argument('--limit_nr_analogies', type=int, default=-1, help='There will only be considered a specific number of entries from the dataset!')
 parser.add_argument('--run_on_cpu', type=bool, default=False, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
 
 # Controlling the one-shot/few-shot behaviours
 parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
-parser.add_argument('--analogy_type', type=str, default='science', help='Analogy type selection.')
+
+# Control the dataset iteration so that only a subsample of it is run
+# You can choose by analogy type (BATS)
+parser.add_argument('--analogy_type', type=str, default='', help='Analogy type selection.')
+# Or you can choose by index interval (SCAN)
+parser.add_argument('--data_start_idx', type=int, default=0, help='The index at which to start picking samples for inference.')
+parser.add_argument('--data_end_idx', type=int, default=-1, help='The index at which to stop picking samples for inference.')
+
 
 args = parser.parse_args()
 print("CL Arguments are:")
@@ -46,6 +52,12 @@ dataloader = ScanDataloader(
     examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
     examples_shot_nr=args.n_shot
 )
+data_start_idx = args.data_start_idx
+data_end_idx = args.data_end_idx
+if data_end_idx < 0 or data_end_idx > len(dataloader):
+    data_end_idx = len(dataloader)
+if data_start_idx >= data_end_idx:
+    raise Exception("Arguments passed are invalid! data_start_idx must be smaller than data_end_idx")
 
 # ----- Prepare model arguments -----
 quantization = None
@@ -71,20 +83,23 @@ print(LLMObj_args)
 LLM = LLMObj(**LLMObj_args)
 
 # ----- Run inference-----
-results = []
 durations = []
-results_filename = f'{args.n_shot}_shot_{args.analogy_type}_{args.model.split("/")[1]}'
+
+results = []
+results_filename = f'{args.n_shot}_shot'
+if args.analogy_type:
+    results_filename += f'_{args.analogy_type}'
+if data_end_idx > 0:
+    results_filename += f'_[{data_start_idx}-{data_end_idx}]'
+results_filename += f'_{args.model.split("/")[1]}'
 if args.save_filename_details:
     results_filename += f'_{args.save_filename_details}'
 
 print("-- Running the model --")
 
-for i, sample in enumerate(dataloader):
+for i in range(data_start_idx, data_end_idx):
     start = time.time()
-    if 0 < args.limit_nr_analogies == i:
-        print(f"Stopping at the first {args.limit_nr_analogies} points from the dataset")
-        break
-
+    sample = dataloader[i]
     prompt = sample['inference']
 
     # In case of one/few-shot, prepend the examples to the prompt
@@ -98,7 +113,7 @@ for i, sample in enumerate(dataloader):
     end = time.time()
     duration = end - start
     durations.append(duration)
-    print(f"Iteration {i}/{len(dataloader)}: %.2f sec" % duration)
+    print(f"Iteration index {i}/{data_end_idx - 1}: %.2f sec" % duration)
 
 d = np.array(durations)
 print("Inference duration: avg - %.2f, max - %.2f, min - %.2f" % (d.mean(), d.max(), d.min()))
