@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #SBATCH --partition=gpu_mig
-#SBATCH --gpus=2
+#SBATCH --gpus=1
 #SBATCH --job-name=Run
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=18
-#SBATCH --time=01:00:00
+#SBATCH --cpus-per-task=9
+#SBATCH --time=04:00:00
 #SBATCH --output=/home/scur0248/output/success/%x.%A.out
 #SBATCH --error=/home/scur0248/output/error/%x.%A.err
 
