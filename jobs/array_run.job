@@ -22,8 +22,8 @@ source activate ATCS-project
 cd $HOME/project/ATCS-project
 
 # Read line by line (per job in array) from the config file
-CONFIG_FILE=config_array_job.txt
+CONFIG_FILE="config_array_job.txt"
 PARAMS=`sed -n ${SLURM_ARRAY_TASK_ID}p $CONFIG_FILE`
 
 # Run your code
-srun python -u run.py $PARAMS
+srun python -u run.py --save_filename_details="${SLURM_ARRAY_TASK_ID}" --include_task_description=False $PARAMS
