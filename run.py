@@ -27,7 +27,7 @@ parser.add_argument('--save_filename_details', type=str, default=None, help='Add
 # one-shot/few-shot behaviours
 parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
 # Set the type of examples to use
-parser.add_argument('--example_type', type=str, default='baseline', choices=['baseline', 'detailed', 'simple', 'long', 'short'], help='Few shot number of examples.')
+parser.add_argument('--example_type', type=str, default='baseline', choices=['baseline', 'complex', 'simple', 'long', 'short'], help='Few shot number of examples.')
 # description of analogy resolution task
 parser.add_argument('--include_task_description', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include a brief description of the analogy resolution task.')
 # use cot
