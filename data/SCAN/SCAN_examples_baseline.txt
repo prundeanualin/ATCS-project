@@ -1,149 +1,149 @@
 atom,solar system,nucleus,sun,,science
-The solar system and the sun have a whole-part relationship, where the sun is the central component of the solar system, around which all the other planets spin. Following the same logic for the atom, the nucleus is the central element of the atom, around which all the other particles spin. So the answer is nucleus.
+The solar system and the sun have a whole-part relationship, where the sun is the central component of the solar system, around which all the other planets spin. Following the same logic for the atom, the nucleus is the central element of the atom, around which all the other particles spin. Therefore the answer is nucleus.
 
 atom,solar system,electron,planet,,science
-The solar system and the planet have a whole-part relationship, where the planet is a main element of the solar system, that spins around a central point of it (the sun). Following the same logic for the atom, the electron is a main component of the atom, that spins around a central point of it (the nucleus). So the answer is electron.
+The solar system and the planet have a whole-part relationship, where the planet is a main element of the solar system, that spins around a central point of it (the sun). Following the same logic for the atom, the electron is a main component of the atom, that spins around a central point of it (the nucleus). Therefore the answer is electron.
 
 heat transfer,water flow,kettle,bucket,,science
-The bucket is the metal device used for concentrating the water flow into a fixed space, resulting in water being maintained in that space. Following the same logic for heat transfer, the kettle is the metal device that concentrates the heat transfer into a fixed space, maintaining the heat in that space. So the answer is kettle.
+The bucket is the metal device used for concentrating the water flow into a fixed space, resulting in water being maintained in that space. Following the same logic for heat transfer, the kettle is the metal device that concentrates the heat transfer into a fixed space, maintaining the heat in that space. Therefore the answer is kettle.
 
 heat transfer,water flow,cooling,emptying,,science
-Emptying describes the state of a space where water is flowing out of it. Following the same logic for the heat transfer, cooling describes the state of a space where heat is flowing out of it. So the answer is cooling.
+Emptying describes the state of a space where water is flowing out of it. Following the same logic for the heat transfer, cooling describes the state of a space where heat is flowing out of it. Therefore the answer is cooling.
 
 heat transfer,water flow,thermodynamics,hydrodynamics,,science
-Hydrodynamics is the branch of physics that studies water flow. Following the same logic for heat transfer, thermodynamics is the branch of physics that studies heat transfer. So the answer is thermodynamics.
+Hydrodynamics is the branch of physics that studies water flow. Following the same logic for heat transfer, thermodynamics is the branch of physics that studies heat transfer. Therefore the answer is thermodynamics.
 
 sounds,waves,wall,shore,,science
-Waves do not go over a shore, making the shore a border where waves stop. Following the same logic for the sounds, the wall is a border where sounds stop, not going through it. So the answer is wall.
+Waves do not go over a shore, making the shore a border where waves stop. Following the same logic for the sounds, the wall is a border where sounds stop, not going through it. Therefore the answer is wall.
 
 sounds,waves,echoes,reflects,,science
-When waves encounter a boundary, they are turned back through a process called reflection (hence a wave reflects). Following the same logic for sounds, when they encounter a boundary, they are turned back through a process called echoing (hence a sound echoes). So the answer is echoes.
+When waves encounter a boundary, they are turned back through a process called reflection (hence a wave reflects). Following the same logic for sounds, when they encounter a boundary, they are turned back through a process called echoing (hence a sound echoes). Therefore the answer is echoes.
 
 sounds,waves,quiet,calm,,science
-The absence of waves is described through a state of calm. Following the same logic for sounds, the absence of sounds is described through a state of quiet.
+The absence of waves is described through a state of calm. Following the same logic for sounds, the absence of sounds is described through a state of quiet. Therefore the answer is animal.
 
 respiration,combustion,animal,fire,,science
-Combustion is the process that leads to the existence of fire. Following the same logic for respiration, it is the process that leads to the existence of animals (animal). So the answer is animal.
+Combustion is the process that leads to the existence of fire. Following the same logic for respiration, it is the process that leads to the existence of animals (animal). Therefore the answer is animal.
 
 respiration,combustion,breathing,burning,,science
-Combustion is the physical process that describes the state of burning. Following the same logic for respiration, it is the physical process that describes the state of breathing. So the answer is breathing.
+Combustion is the physical process that describes the state of burning. Following the same logic for respiration, it is the physical process that describes the state of breathing. Therefore the answer is breathing.
 
 light,sound,red,low,,science
-Low characterizes sound as a vibration that is produced at small frequencies. Following the same logic for light, red characterizes light as a vibration that is produced at small frequencies. So the answer is red.
+Low characterizes sound as a vibration that is produced at small frequencies. Following the same logic for light, red characterizes light as a vibration that is produced at small frequencies. Therefore the answer is red.
 
 light,sound,violet,high,,science
-High characterizes sound as a vibration that is produced at high frequencies. Following the same logic for light, violet characterizes light as a vibration that is produced at high frequencies. So the answer is violet.
+High characterizes sound as a vibration that is produced at high frequencies. Following the same logic for light, violet characterizes light as a vibration that is produced at high frequencies. Therefore the answer is violet.
 
 light,sound,bright,loud,,science
-When the volume of sound is high, the sound is described as being loud. Following the same logic for light, when the volume of light is high, the light is described as being bright. So the answer is bright.
+When the volume of sound is high, the sound is described as being loud. Following the same logic for light, when the volume of light is high, the light is described as being bright. Therefore the answer is bright.
 
 planet,projectile,orbit,trajectory,,science
-The trajectory describes the path followed by a projectile as a moving object. Following the same logic for planet, the orbit describes the path followed by a planet as a moving object. So the answer is orbit.
+The trajectory describes the path followed by a projectile as a moving object. Following the same logic for planet, the orbit describes the path followed by a planet as a moving object. Therefore the answer is orbit.
 
 planet,projectile,sun,earth,,science
-The projectile moves according to the gravitational force that the earth exerts. Following the same logic for the planet, it moves according to the gravitational force that the sun exerts. So the answer is sun.
+The projectile moves according to the gravitational force that the earth exerts. Following the same logic for the planet, it moves according to the gravitational force that the sun exerts. Therefore the answer is sun.
 
 natural selection,artificial selection,species,breeds,,science
-Artificial selection is a process that leads to perpetuating selected traits into future generations that are called breeds. Following the same logic for natural selection, it is a process that leads to perpetuating selected traits into future generations that are called species. So the answer is species.
+Artificial selection is a process that leads to perpetuating selected traits into future generations that are called breeds. Following the same logic for natural selection, it is a process that leads to perpetuating selected traits into future generations that are called species. Therefore the answer is species.
 
 natural selection,artificial selection,competition,selection,,science
-Artificial selection is a process that leads to perpetuating specific traits, where these traits are chosen by selection. Following the same logic for natural selection, it is a process that leads to perpetuating specific traits, where these traits are chosen by competition. So the answer is competition.
+Artificial selection is a process that leads to perpetuating specific traits, where these traits are chosen by selection. Following the same logic for natural selection, it is a process that leads to perpetuating specific traits, where these traits are chosen by competition. Therefore the answer is competition.
 
 natural selection,artificial selection,mating,breeding,,science
-Breeding is the process used in artificial selection to perpetuate specific traits. Following the same logic for natural selection, mating is the process used in natural selection to perpetuate specific traits. So the answer is mating.
+Breeding is the process used in artificial selection to perpetuate specific traits. Following the same logic for natural selection, mating is the process used in natural selection to perpetuate specific traits. Therefore the answer is mating.
 
 gas molecules,billiard balls,molecules,balls,,science
-Billiard balls are balls that have a specific property of being used in billiards. Following the same logic for gas molecules, they are molecules that have a specific property of being in a gas state. So the answer is molecules.
+Billiard balls are balls that have a specific property of being used in billiards. Following the same logic for gas molecules, they are molecules that have a specific property of being in a gas state. Therefore the answer is molecules.
 
 gas molecules,billiard balls,gas,billiards,,science
-Billiard balls are balls that have a specific property of being used in billiards. Following the same logic for gas molecules, they are molecules that have a specific property of being in a gas state. So the answer is gas.
+Billiard balls are balls that have a specific property of being used in billiards. Following the same logic for gas molecules, they are molecules that have a specific property of being in a gas state. Therefore the answer is gas.
 
 gas molecules,billiard balls,cold,slow,,science
-Billiard balls, when in slow motion, are physically described as being slow. Following the same logic for gas molecules, when in slow motion, are physically described as being cold. So the answer is cold.
+Billiard balls, when in slow motion, are physically described as being slow. Following the same logic for gas molecules, when in slow motion, are physically described as being cold. Therefore the answer is cold.
 
 mind,computer,thinking,processing,,science
-The computer has the role of processing. Following the same logic for mind, the mind has the role of thinking. So the answer is thinking.
+The computer has the role of processing. Following the same logic for mind, the mind has the role of thinking. Therefore the answer is thinking.
 
 mind,computer,forgetting,erasing,,science
-Erasing is the process by which data is removed from the computer. Following the same logic for the mind, forgetting is the process by which data is removed from the mind. So the answer is forgetting.
+Erasing is the process by which data is removed from the computer. Following the same logic for the mind, forgetting is the process by which data is removed from the mind. Therefore the answer is forgetting.
 
 bacterial mutation,slot machine,reproducing,winning,,science
-The successful outcome of a slot machine is the act of winning. Following the same logic for the bacterial mutation, the successful outcome of a bacterial mutation is the act of reproducing. So the answer is reproducing.
+The successful outcome of a slot machine is the act of winning. Following the same logic for the bacterial mutation, the successful outcome of a bacterial mutation is the act of reproducing. Therefore the answer is reproducing.
 
 bacterial mutation,slot machine,mutating,spinning,,science
-The slot machine in action is spinning. Following the same logic for the bacterial mutation, the bacterial mutation in action is mutating. So the answer is mutating.
+The slot machine in action is spinning. Following the same logic for the bacterial mutation, the bacterial mutation in action is mutating. Therefore the answer is mutating.
 
 accepting a belief,buying an item,believer,buyer,,metaphor
-The buyer is the agent that does the act of buying an item. Following the same logic, the believer is the agent who does the act of accepting a belief. So the answer is believer.
+The buyer is the agent that does the act of buying an item. Following the same logic, the believer is the agent who does the act of accepting a belief. Therefore the answer is believer.
 
 accepting a belief,buying an item,belief,merchandise,,metaphor
-Merchandise describes the element that is directly involved in the act of buying an item. Following the same logic, the belief describes the element that is directly involved in the act of accepting a belief. So the answer is belief.
+Merchandise describes the element that is directly involved in the act of buying an item. Following the same logic, the belief describes the element that is directly involved in the act of accepting a belief. Therefore the answer is belief.
 
 accepting a belief,buying an item,advocating,selling,,metaphor
-Selling describes the process of buying an item from the perspective of the other agent involved in the action. Following the same logic, advocating describes the process of accepting a belief from the perspective of the other agent involved in the action. So the answer is advocating.
+Selling describes the process of buying an item from the perspective of the other agent involved in the action. Following the same logic, advocating describes the process of accepting a belief from the perspective of the other agent involved in the action. Therefore the answer is advocating.
 
 reasons for a theory,grounds for a building,rational,solid,,metaphor
-Having grounds for a building leads to that building having the main property of being solid. Following the same logic, having reasons for a theory leads to that theory having the main property of being rational. So the answer is rational.
+Having grounds for a building leads to that building having the main property of being solid. Following the same logic, having reasons for a theory leads to that theory having the main property of being rational. Therefore the answer is rational.
 
 reasons for a theory,grounds for a building,theories,buildings,,metaphor
-Grounds for a building describe a context that directly focuses on buildings. Following the same logic, reasons for a theory describe a context that directly focuses on theories. So the answer is theories.
+Grounds for a building describe a context that directly focuses on buildings. Following the same logic, reasons for a theory describe a context that directly focuses on theories. Therefore the answer is theories.
 
 reasons for a theory,grounds for a building,confirming,supporting,,metaphor
-The grounds for a building have a supporting role for that building. Following the same logic, the reasons for a theory have a confirming role for that theory. So the answer is confirming.
+The grounds for a building have a supporting role for that building. Following the same logic, the reasons for a theory have a confirming role for that theory. Therefore the answer is confirming.
 
 difficulties,impediments to travel,person,traveller,,metaphor
-The impediments to travel are encountered by a traveller. Following the same logic, the difficulties are encountered by a person. So the answer is person.
+The impediments to travel are encountered by a traveller. Following the same logic, the difficulties are encountered by a person. Therefore the answer is person.
 
 difficulties,impediments to travel,goal,destination,,metaphor
-For a person to encounter impediments to travel, they need to first have a destination. Following the same logic, for a person to encounter difficulties, they need to first have a goal. So the answer is goal.
+For a person to encounter impediments to travel, they need to first have a destination. Following the same logic, for a person to encounter difficulties, they need to first have a goal. Therefore the answer is goal.
 
 difficulties,impediments to travel,plan,route,,metaphor
-To overcome impediments to travel, a person needs to create a new route. Following the same logic, to overcome difficulties, a person needs to create a new plan. So the answer is plan.
+To overcome impediments to travel, a person needs to create a new route. Following the same logic, to overcome difficulties, a person needs to create a new plan. Therefore the answer is plan.
 
 time,money,invest,allocate,,metaphor
-To buy a new item, a person needs to allocate money for it. Following the same logic, to perform a new activity, a person needs to invest time in it. So the answer is invest.
+To buy a new item, a person needs to allocate money for it. Following the same logic, to perform a new activity, a person needs to invest time in it. Therefore the answer is invest.
 
 time,money,schedule,budget,,metaphor
-The budget is a structured plan for spending money. Following the same logic, the schedule is a structured plan for spending time. So the answer is schedule.
+The budget is a structured plan for spending money. Following the same logic, the schedule is a structured plan for spending time. Therefore the answer is schedule.
 
 time,money,efficient,effective,,metaphor
-If an activity results in saving money, that activity is effective. Following the same logic, if an activity results in saving time, that activity is efficient. So the answer is efficient.
+If an activity results in saving money, that activity is effective. Following the same logic, if an activity results in saving time, that activity is efficient. Therefore the answer is efficient.
 
 ideas,seeds,inspired,planted,,metaphor
-For seeds to grow and evolve, they need to be planted. Following the same logic, for ideas to grow and evolve, they need to be inspired. So the answer is inspired.
+For seeds to grow and evolve, they need to be planted. Following the same logic, for ideas to grow and evolve, they need to be inspired. Therefore the answer is inspired.
 
 ideas,seeds,productive,fruitful,,metaphor
-If seeds lead to a positive outcome, they are called fruitful. Following the same logic, if ideas lead to a positive outcome, they are called productive. So the answer is productive.
+If seeds lead to a positive outcome, they are called fruitful. Following the same logic, if ideas lead to a positive outcome, they are called productive. Therefore the answer is productive.
 
 ideas,seeds,product,fruit,,metaphor
-The practical outcome of seeds can be represented by a fruit. Following the same logic, the practical outcome of ideas can be represented by a product. So the answer is product.
+The practical outcome of seeds can be represented by a fruit. Following the same logic, the practical outcome of ideas can be represented by a product. Therefore the answer is product.
 
 mind,machine,thinking,working,,metaphor
-For a machine to output something, it needs to be working. Following the same logic, for the mind to output something, it needs to be thinking. So the answer is thinking.
+For a machine to output something, it needs to be working. Following the same logic, for the mind to output something, it needs to be thinking. Therefore the answer is thinking.
 
 mind,machine,awake,turned on,,metaphor
-For a machine to be working, it first needs to be turned on. Following the same logic, for the mind to be working, it first needs to be awake. So the answer is awake.
+For a machine to be working, it first needs to be turned on. Following the same logic, for the mind to be working, it first needs to be awake. Therefore the answer is awake.
 
 idea,object,understand,hold,,metaphor
-To discover the weight of an object, a person first needs to hold it. Following the same logic, to discover the weight of an idea, a person first needs to understand it. So the answer is understand.
+To discover the weight of an object, a person first needs to hold it. Following the same logic, to discover the weight of an idea, a person first needs to understand it. Therefore the answer is understand.
 
 idea,object,analyze,weigh,,metaphor
-To discover the inner properties of an object, a person needs to weigh it. Following the same logic, to discover the inner properties of an idea, a person needs to analyze it. So the answer is analyze.
+To discover the inner properties of an object, a person needs to weigh it. Following the same logic, to discover the inner properties of an idea, a person needs to analyze it. Therefore the answer is analyze.
 
 understanding,following,understand,follow,,metaphor
-Following describes the continuous unfolding of the action to follow. Based on the same logic, understanding describes the continuous unfolding of the action to understand. So the answer is understand.
+Following describes the continuous unfolding of the action to follow. Based on the same logic, understanding describes the continuous unfolding of the action to understand. Therefore the answer is understand.
 
 understanding,following,speaker,leader,,metaphor
-A successful leader has people following them. Based on the same logic, a successful speaker has people understanding them. So the answer is speaker.
+A successful leader has people following them. Based on the same logic, a successful speaker has people understanding them. Therefore the answer is speaker.
 
 understanding,seeing,knowledge,light,,metaphor
-For seeing an object, a person need light to reflect on it. Following the same logic, for understanding an idea, you need knowledge about it. So the answer is knowledge.
+For seeing an object, a person need light to reflect on it. Following the same logic, for understanding an idea, you need knowledge about it. Therefore the answer is knowledge.
 
 understanding,seeing,explaining,illuminating,,metaphor
-For seeing an object, a person needs to have a source illuminating it. Following the same logic, for understanding an idea, a person needs to have a source explaining it. So the answer is explaining.
+For seeing an object, a person needs to have a source illuminating it. Following the same logic, for understanding an idea, a person needs to have a source explaining it. Therefore the answer is explaining.
 
 life,theatre,event,act,,metaphor
-The stories presented inside the theatre are composed of acts (an act). Following the same logic, the stories presented in life are composed of events (an event). So the answer is event.
+The stories presented inside the theatre are composed of acts (an act). Following the same logic, the stories presented in life are composed of events (an event). Therefore the answer is event.
 
 life,theatre,people,actors,,metaphor
-The stories presented inside the theatre are performed by actors. Following the same logic, the stories presented in life are performed by people. So the answer is people.
+The stories presented inside the theatre are performed by actors. Following the same logic, the stories presented in life are performed by people. Therefore the answer is people.

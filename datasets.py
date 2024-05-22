@@ -121,13 +121,13 @@ if __name__ == '__main__':
         shuffle=False,
         analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
         analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
-        examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
+        examples_file=SCAN_EXAMPLES_FILEPATH.format('baseline'),
         examples_shot_nr=8
     )
     for i, sample in enumerate(dataset):
         print(sample['inference'] + "  -- " + sample['label'])
         for ex in sample['examples']:
-            print(ex['simple'])
+            print(ex['analogy_complete'])
         print("----\n")
 
     # Test is_example_equal_to_sample method

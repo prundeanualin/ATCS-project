@@ -110,9 +110,9 @@ for i in range(data_start_idx, data_end_idx):
                             n_shot=args.n_shot,
                             cot=args.cot,
                             include_task_description=args.include_task_description)
-    print("Prompt is: ")
-    print(prompt)
-    print("---------------\n")
+    # print("Prompt is: ")
+    # print(prompt)
+    # print("---------------\n")
     output = LLM.generate(prompt)
 
     del sample['examples']
@@ -133,7 +133,7 @@ print("Evaluation results:")
 print(evaluation_results)
 
 # ----- Saving the results -----
-results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})'
+results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
 if args.data_end_idx > 0:
