@@ -131,11 +131,9 @@ print("Inference duration(sec): total - %.2f, avg - %.2f, max - %.2f, min - %.2f
 
 # ----- Evaluate -----
 print("-- Evaluating the model --")
-acc_score = evaluate(results, SimpleEvaluationStrategy())
-print(f"Score is {acc_score}%")
+evaluation_results = evaluate(results, SimpleEvaluationStrategy())
+print("Evaluation results:")
+print(evaluation_results)
 
-evaluation_metrics = {
-    "acc": acc_score
-}
 
-save_results(results, evaluation_metrics, results_filename)
+save_results(results, evaluation_results, results_filename)
