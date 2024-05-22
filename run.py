@@ -1,4 +1,7 @@
 import argparse
+import time
+
+import numpy as np
 
 from get_datasets import *
 from prompt_templates.analogy import *
@@ -10,12 +13,12 @@ from tqdm import tqdm
 from transformers import BitsAndBytesConfig
 import pickle
 
-from datasets import ScanDataset, BATSDataloader_0shot, BATSDataloader_fewshot
+from datasets import ScanDataset, BATSDataloader
 from datasets import BATSDataloader_0shot, BATSDataloader_fewshot
 
 import os
 
-from utils import seed_experiments, SAVE_DIR, SAVE_BATS_DIR
+from utils import seed_experiments, SAVE_DIR, SAVE_BATS_DIR, save_results
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Model')
@@ -23,14 +26,17 @@ parser.add_argument('--tokenizer', type=str, default=None, help="LLM Tokenizer. 
 parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quantization', choices=['None', '4bit'])
 parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CPU Memory usage')
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
-parser.add_argument('--debug', type=bool, default=False, help='If running in debug mode, there will be a dummy pipeline created. No real model inference will hapen!')
 parser.add_argument('--dataset', type=str, default='BATS', help='Dataset to use for inference', choices=['SCAN', 'BATS', 'BATS-fewshot'])
-parser.add_argument('--BATS_filename', type=str, default='L01 [hypernyms - animals] sample', help='BATS filename to use for inference')
+parser.add_argument('--BATS_filename', type=str, default='L01 [hypernyms - animals]', help='BATS filename to use for inference')
 parser.add_argument('--prompt_structure', type=str, default='by-relation', help='Prompt structure, e.g. if A is B (by-relation) or if A is C (by-target-word)', choices=['by-relation', 'by-target-word'])
-parser.add_argument('--COT_template', default = False, type=lambda x: False if x.lower() == 'false' else x, help='If True, will use COT template')
-parser.add_argument('--number_of_analogy', default = False, type=lambda x: False if x.lower() == 'false' else int(x), help='Number of analogy to do inference on')
-parser.add_argument('--number_of_shot', default = 1, type=int, help='Number of shot for BATS dataset in few-shot learning')
+parser.add_argument('--cot', default=False, action=argparse.BooleanOptionalAction, help='If True, will use COT template')
+# parser.add_argument('--COT_template', default = False, type=lambda x: False if x.lower() == 'false' else x, help='If True, will use COT template')
+parser.add_argument('--number_of_analogy', default=False, type=lambda x: False if x.lower() == 'false' else int(x), help='Number of analogy to do inference on')
+parser.add_argument('--number_of_shot', default=0, type=int, help='Number of shot for BATS dataset in few-shot learning')
 parser.add_argument('--explanation', default = False, type=lambda x: False if x.lower() == 'false' else x, help='If True, will include explanation in the inference')
+
+parser.add_argument('--run_on_cpu', default=False, action=argparse.BooleanOptionalAction, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
+
 args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
@@ -45,7 +51,9 @@ seed_experiments(args.seed)
 
 
 # ----- Load dataset -----
+is_bats = True
 if args.dataset == 'SCAN':
+    is_bats=False
     dataset = ScanDataset(
         shuffle=False,
         analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
@@ -55,27 +63,16 @@ if args.dataset == 'SCAN':
         examples_shot_nr=1
     )
 elif args.dataset == 'BATS':
-    BATS_dataset = BATSDataloader_0shot(
-        dataFolder = BATS_FOLDER,
-        fileName = args.BATS_filename,
+    dataset = BATSDataloader(
+        n_shot=args.number_of_shot,
+        fileName=args.BATS_filename,
         numberOfAnalogy=args.number_of_analogy,
-        cot = args.COT_template,
-        shuffle = True,
-        promptType = args.prompt_structure,
-        promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE
-    )
-elif args.dataset == 'BATS-fewshot':
-    BATS_dataset = BATSDataloader_fewshot(
-        dataFolder = BATS_FOLDER,
-        fileName = args.BATS_filename,
-        numberOfShot = args.number_of_shot,
-        numberOfAnalogy = args.number_of_analogy,
-        cot = args.COT_template,
-        shuffle = True,
-        promptType = args.prompt_structure,
-        promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
-        promptFull = ANALOGY_TEMPLATE_SIMPLE_FULL,
-        explanation = args.explanation
+        cot=args.cot,
+        shuffle=True,
+        promptType=args.prompt_structure,
+        promptFormat=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+        promptFull=ANALOGY_TEMPLATE_SIMPLE_FULL,
+        explanation=args.explanation
     )
 else:
     raise ValueError("Dataset not supported")
@@ -95,7 +92,7 @@ LLMObj_args = {
     'model': args.model,
     'model_kwargs': model_kwargs,
     'tokenizer_name': args.tokenizer,
-    'dummy_pipeline': args.debug
+    'dummy_pipeline': args.run_on_cpu
 }
 print("LLMObj Arguments are:")
 print(LLMObj_args)
@@ -105,45 +102,51 @@ print(LLMObj_args)
 LLM = LLMObj(**LLMObj_args)
 
 
-# ----- Run inference for SCAN -----
+
+# ----- Run inference-----
+durations = []
 results = []
-if args.dataset == 'SCAN':
-    for i, sample in tqdm(enumerate(dataset)):
-        output = LLM.generate(sample['inference'])
-        results.append([sample, output])
-    save_file = os.path.join(SAVE_DIR, f'{args.model.split("/")[1]}_generated_prompts.pl')
-    with open(save_file, 'wb') as f:
-        pickle.dump(results, f)
-elif args.dataset == 'BATS':
-    for i, sample in tqdm(enumerate(BATS_dataset())):
-        output = LLM.generate(sample['inference'])
-        results.append([sample, output])
-    model = args.model.split("/")[1]
-    file_name = BATS_dataset.get_file_name()
-    n_analogy = args.number_of_analogy if args.number_of_analogy else 1
-    if not os.path.exists(f'{SAVE_BATS_DIR}/0_shot_{model}'):
-        os.makedirs(f'{SAVE_BATS_DIR}/0_shot_{model}')
-    save_file = os.path.join(f'{SAVE_BATS_DIR}/0_shot_{model}', f'{file_name}_{n_analogy}_generated_prompts_per_cat.pl')
-    with open(save_file, 'wb') as f:
-        pickle.dump(results, f)
-elif args.dataset == 'BATS-fewshot':
-    for i, sample in tqdm(enumerate(BATS_dataset())):
-        output = LLM.generate(sample['inference'])
-        results.append([sample, output])
-    model = args.model.split("/")[1]
-    file_name = BATS_dataset.get_file_name()
-    n_shot = args.number_of_shot
-    n_analogy = args.number_of_analogy
-    if not os.path.exists(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}'):
-        os.makedirs(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}')
-    save_file = os.path.join(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}', f'{file_name}_{n_analogy}_generated_prompts_per_cat.pl')
-    with open(save_file, 'wb') as f:
-        pickle.dump(results, f)
-else:
-    raise ValueError("Dataset not supported")
+
+print("-- Running the model --")
+
+for i, sample in enumerate(dataset):
+    start = time.time()
+    # if args.analogy_type and sample['analogy_type'] != args.analogy_type:
+    #     continue
+
+    # if args.dataset == 'SCAN':
+    #     prompt = prepare_prompt(sample['inference'],
+    #                             sample['examples'],
+    #                             n_shot=args.n_shot,
+    #                             cot=args.cot,
+    #                             include_task_description=args.include_task_description)
+    prompt = sample['inference']
+    print("Prompt is: ")
+    print(prompt)
+    print("---------------\n")
+    output = LLM.generate(prompt)
+
+    if 'examples' in sample:
+        del sample['examples']
+    results.append([sample, output])
+
+    end = time.time()
+    duration = end - start
+    durations.append(duration)
+    print(f"Iteration index {i}/{len(dataset) - 1}: %.2f sec" % duration)
+
+d = np.array(durations)
+print("Inference duration(sec): total - %.2f, avg - %.2f, max - %.2f, min - %.2f" % (d.sum(), d.mean(), d.max(), d.min()))
 
 # ----- Evaluate -----
-# results = pd.read_pickle(f'{args.model.split("/")[1]}_generated_prompts.pl')
-# results = pd.read_pickle(save_file)
-acc_score = evaluate(results, SimpleEvaluationStrategy())
-print(f"Score is {acc_score}%")
+print("-- Evaluating the model --")
+evaluation_results = evaluate(results, SimpleEvaluationStrategy())
+print("Evaluation results:")
+print(evaluation_results)
+
+# ----- Saving the results -----
+
+model_name = args.model.split("/")[1]
+n_analogy = args.number_of_analogy if args.number_of_analogy else 1
+results_filename = f'{args.number_of_shot}shot_cot({args.cot})_nrA({n_analogy})_promptType({args.prompt_structure})_{args.BATS_filename}_{model_name}'
+save_results(results, evaluation_results, is_bats, results_filename)

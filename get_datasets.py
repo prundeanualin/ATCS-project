@@ -1,6 +1,8 @@
 import os
 import requests
 
+EXAMPLE_CATEGORIES = ["baseline"]
+
 ############################
 ########### SCAN ###########
 ############################
@@ -11,8 +13,15 @@ SCAN_EXAMPLES_FILEPATH = os.path.join(SCAN_DIR, "SCAN_examples_{}.txt")
 
 SCAN_DATASET_URL = "https://raw.githubusercontent.com/taczin/SCAN_analogies/main/data/SCAN_dataset.csv"
 
-EXAMPLE_CATEGORIES = ["baseline"]
+############################
+########### BATS ###########
+############################
 
+# Files that contain the dataset items
+BATS_DATASET_FILES = ["L01 [hypernyms - animals]", "L02 [hypernyms - misc]", "L03 [hyponyms - misc]",
+                      "L04 [meronyms - substance]", "L05 [meronyms - member]", "L06 [meronyms - part]",
+                      "L07 [synonyms - intensity]", "L08 [synonyms - exact]", "L09 [antonyms - gradable]",
+                      "L10 [antonyms - binary]"]
 
 # For BATS dataset
 BATS_FOLDER = 'data/BATS'

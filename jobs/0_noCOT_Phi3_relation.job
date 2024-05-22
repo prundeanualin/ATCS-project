@@ -1,12 +1,13 @@
 #!/bin/bash
 
-#SBATCH --partition=gpu
-#SBATCH --gpus=2
-#SBATCH --job-name=Pmini_nC_50
+#SBATCH --partition=gpu_mig
+#SBATCH --gpus=1
+#SBATCH --job-name=nocot_0shot_phi3_BATS
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=18
-#SBATCH --time=10:00:00
-#SBATCH --output=job_outputs/0shot_noCOT/Phi3_slurm_output_%A_relation.out
+#SBATCH --cpus-per-task=9
+#SBATCH --time=15:00:00
+#SBATCH --output=/home/scur0248/output/success/%x.%A.out
+#SBATCH --error=/home/scur0248/output/error/%x.%A.err
 
 module purge
 module load 2022
@@ -14,15 +15,8 @@ module load Anaconda3/2022.05
 
 # Activate your environment
 source activate ATCS-project
-# srun python Project/inference.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha"
-# --datasets (default: 'BATS') --BATS_filename --prompt_structure (default: 'by-relation'))  --COT_template (default:False) --number_of_analogy (default:all)
-srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L02 [hypernyms - misc]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L03 [hyponyms - misc]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L04 [meronyms - substance]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L05 [meronyms - member]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L06 [meronyms - part]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L07 [synonyms - intensity]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L08 [synonyms - exact]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L09 [antonyms - gradable]" --number_of_analogy 50
-srun python ../run.py --dataset "BATS" --BATS_filename "L10 [antonyms - binary]" --number_of_analogy 50
+
+# Go to the directory that contains the project, the runnable
+cd $HOME/project/ATCS-project
+
+srun python ../run.py --dataset "BATS" --BATS_filename "all" --number_of_analogy 50

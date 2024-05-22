@@ -132,6 +132,65 @@ class ScanDataset(Dataset):
         }
 
 
+class BATSDataloader:
+    def __init__(self,
+                 n_shot=0,
+                 fileName="all",
+                 numberOfAnalogy=False,
+                 cot=False,
+                 shuffle=False,
+                 promptType="by-relation",
+                 promptFormat=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+                 promptFull=ANALOGY_TEMPLATE_SIMPLE_FULL,
+                 explanation=False):
+        if fileName == "all":
+            dataset_files = BATS_DATASET_FILES
+        else:
+            dataset_files = [fileName]
+        # One dataloader for each dataset file
+        self.dataloaders = []
+        cot_template = COT_TEMPLATE if cot else False
+        if n_shot == 0:
+            for f in dataset_files:
+                bats_dataloader_0shot=BATSDataloader_0shot(
+                    dataFolder=BATS_FOLDER,
+                    fileName=f,
+                    numberOfAnalogy=numberOfAnalogy,
+                    cot=cot_template,
+                    shuffle=shuffle,
+                    promptType=promptType,
+                    promptFormat=promptFormat
+                )
+                self.dataloaders.append(bats_dataloader_0shot)
+        else:
+            for f in dataset_files:
+                bats_dataloader_fewshot = BATSDataloader_fewshot(
+                    dataFolder=BATS_FOLDER,
+                    fileName=f,
+                    numberOfShot=n_shot,
+                    numberOfAnalogy=numberOfAnalogy,
+                    cot=cot_template,
+                    shuffle=shuffle,
+                    promptType=promptType,
+                    promptFormat=promptFormat,
+                    promptFull=promptFull,
+                    explanation=explanation
+                )
+                self.dataloaders.append(bats_dataloader_fewshot)
+        # Add all items in the list so that we can iterate through it
+        self.all_items = []
+        for d in self.dataloaders:
+            d_items = d()
+            self.all_items.extend(d_items)
+        print("Finished loading BATS!")
+
+    def __len__(self):
+        return len(self.all_items)
+
+    def __getitem__(self, idx):
+        return self.all_items[idx]
+
+
 class BATSDataloader_0shot:
     def __init__(self, 
                  dataFolder, 
@@ -179,10 +238,10 @@ class BATSDataloader_0shot:
         #     writer.writerows(self.pairs)
 
         # save as pickle
-        if not os.path.exists(f'{self.dataFolder}/pairs'):
-            os.makedirs(f'{self.dataFolder}/pairs')
-        with open(f'{self.dataFolder}/pairs/{self.fileName}.pkl', 'wb') as f:
-            pickle.dump(self.pairs, f)
+        # if not os.path.exists(f'{self.dataFolder}/pairs'):
+        #     os.makedirs(f'{self.dataFolder}/pairs')
+        # with open(f'{self.dataFolder}/pairs/{self.fileName}.pkl', 'wb') as f:
+        #     pickle.dump(self.pairs, f)
 
     def build_prompt(self):
         '''
@@ -220,10 +279,10 @@ class BATSDataloader_0shot:
         #     writer.writerows(self.prompt)
 
         # save as pickle
-        if not os.path.exists(f'{self.dataFolder}/prompt'):
-            os.makedirs(f'{self.dataFolder}/prompt')
-        with open(f'{self.dataFolder}/prompt/{fname}.pkl', 'wb') as f:
-            pickle.dump(self.prompt, f)
+        # if not os.path.exists(f'{self.dataFolder}/prompt'):
+        #     os.makedirs(f'{self.dataFolder}/prompt')
+        # with open(f'{self.dataFolder}/prompt/{fname}.pkl', 'wb') as f:
+        #     pickle.dump(self.prompt, f)
 
     def get_file_name(self):
         prompt_condition = self.promptFormat.split(",")[0]
@@ -379,17 +438,19 @@ if __name__ == '__main__':
     # for i, sample in tqdm(enumerate(dataset)):
     #     print(sample['inference'])
 
-    BATS_dataset = BATSDataloader_0shot(
-        BATS_FOLDER, 
-        BATS_FILENAME, 
-        numberOfAnalogy = 2, 
-        cot = COT_TEMPLATE,
-        shuffle = False,
-        promptType='by-relation', 
-        promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE
+    dataset = BATSDataloader(
+        n_shot=0,
+        fileName="L01 [hypernyms - animals] sample",
+        numberOfAnalogy=False,
+        cot=False,
+        shuffle=True,
+        promptType="by-relation",
+        promptFormat=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
+        promptFull=ANALOGY_TEMPLATE_SIMPLE_FULL,
+        explanation=False
     )
 
-    for id, sample in enumerate(BATS_dataset()):
+    for id, sample in enumerate(dataset):
         print(sample['inference'])
         print(sample['label'])
         print(sample['alternatives'])
