@@ -29,9 +29,7 @@ class ScanDataloader:
                  examples_file=SCAN_EXAMPLES_FILEPATH,
                  examples_shot_nr=1):
         """
-            - examples_start_idx: needs to be within the range of available examples per analogy type.
-                For the current SCAN setup, this means 25 examples per analogy type.
-            - shot_nr: number of examples to be considered from each analogy type
+            - examples_shot_nr: number of examples to be considered from each analogy type
         """
         self.analogy_sentence_inference = analogy_sentence_infer
         self.analogy_sentence_example = analogy_sentence_full

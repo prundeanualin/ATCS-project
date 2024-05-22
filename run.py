@@ -2,7 +2,7 @@ import argparse
 import time
 
 from get_datasets import SCAN_EXAMPLES_FILEPATH, EXAMPLE_CATEGORIES
-from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
+from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL, ANALOGY_DESCRIPTION
 from model import LLMObj
 from evaluate import *
 
@@ -20,10 +20,11 @@ parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CP
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 parser.add_argument('--save_filename_details', type=str, default=None, help='Adds more details to the save filename.')
 
-parser.add_argument('--run_on_cpu', type=bool, default=False, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
-
-# Controlling the one-shot/few-shot behaviours
+# ---- Controlling the prompt ----
+# one-shot/few-shot behaviours
 parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
+# description of analogy resolution task
+parser.add_argument('--include_task_description', type=bool, default=False, help='If true, the prompt will also include a brief description of the analogy resolution task.')
 
 # Control the dataset iteration so that only a subsample of it is run
 # You can choose by analogy type (BATS)
@@ -31,6 +32,8 @@ parser.add_argument('--analogy_type', type=str, default='', help='Analogy type s
 # Or you can choose by index interval (SCAN)
 parser.add_argument('--data_start_idx', type=int, default=0, help='The index at which to start picking samples for inference.')
 parser.add_argument('--data_end_idx', type=int, default=-1, help='The index at which to stop picking samples for inference.')
+
+parser.add_argument('--run_on_cpu', type=bool, default=False, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
 
 
 args = parser.parse_args()
@@ -102,21 +105,26 @@ for i in range(data_start_idx, data_end_idx):
     sample = dataloader[i]
     prompt = sample['inference']
 
+    # Possibly extend the prompt with the task description and some examples
+    if args.include_task_description:
+        prompt = ANALOGY_DESCRIPTION + prompt
     # In case of one/few-shot, prepend the examples to the prompt
     if args.n_shot > 0:
         prompt = "{}\n" * args.n_shot + prompt
         prompt = prompt.format(*map(lambda x: x['simple'], sample['examples']))
 
     output = LLM.generate(prompt)
+
     del sample['examples']
     results.append([sample, output])
+
     end = time.time()
     duration = end - start
     durations.append(duration)
     print(f"Iteration index {i}/{data_end_idx - 1}: %.2f sec" % duration)
 
 d = np.array(durations)
-print("Inference duration: avg - %.2f, max - %.2f, min - %.2f" % (d.mean(), d.max(), d.min()))
+print("Inference duration(sec): total - %.2f, avg - %.2f, max - %.2f, min - %.2f" % (d.sum(), d.mean(), d.max(), d.min()))
 
 # ----- Evaluate -----
 print("-- Evaluating the model --")
