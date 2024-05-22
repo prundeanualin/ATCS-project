@@ -20,8 +20,8 @@ source activate ATCS-project
 # Go to the directory that contains the project, the runnable
 # Your job starts in the directory where you call sbatch
 cd $HOME/project/ATCS-project
-srun python -u run.py
 
+# Read line by line (per job in array) from the config file
 CONFIG_FILE=array_job_config.txt
 PARAMS=`sed -n ${SLURM_ARRAY_TASK_ID}p $CONFIG_FILE`
 
