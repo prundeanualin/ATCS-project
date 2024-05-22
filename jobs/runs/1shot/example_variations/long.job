@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_mig
+#SBATCH --gpus=1
+#SBATCH --job-name=SCAN_1shot-long_llama
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=9
+#SBATCH --time=15:00:00
+#SBATCH --output=/home/scur0248/output/success/%x.%A.out
+#SBATCH --error=/home/scur0248/output/error/%x.%A.err
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+
+# Go to the directory that contains the project, the runnable
+cd $HOME/project/ATCS-project
+srun python -u run.py --n_shot=1 --model="meta-llama/Meta-Llama-3-8B-Instruct" --example_type=long
