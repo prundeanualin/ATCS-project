@@ -3,7 +3,7 @@ import torch
 import random
 
 from get_datasets import *
-from prompt_templates.analogy import *
+from prompt_processing.templates import *
 
 
 def get_list_alternatives(alternatives):
@@ -29,9 +29,7 @@ class ScanDataloader:
                  examples_file=SCAN_EXAMPLES_FILEPATH,
                  examples_shot_nr=1):
         """
-            - examples_start_idx: needs to be within the range of available examples per analogy type.
-                For the current SCAN setup, this means 25 examples per analogy type.
-            - shot_nr: number of examples to be considered from each analogy type
+            - examples_shot_nr: number of examples to be considered from each analogy type
         """
         self.analogy_sentence_inference = analogy_sentence_infer
         self.analogy_sentence_example = analogy_sentence_full
@@ -85,8 +83,9 @@ class ScanDataloader:
                     'source': source,
                     'targ_word': targ_word,
                     'src_word': src_word,
-                    'detailed_cot': example[1],
-                    'simple': self.analogy_sentence_example.format(target, source, targ_word, src_word),
+                    'analogy_incomplete': self.analogy_sentence_inference.format(target, source, targ_word),
+                    'analogy_complete': self.analogy_sentence_example.format(target, source, targ_word, src_word),
+                    'analogy_detailed_cot': example[1],
                     'analogy_type': analogy_type
                 }
                 self.examples[analogy_type].append(ex)

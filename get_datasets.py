@@ -11,9 +11,6 @@ SCAN_EXAMPLES_FILEPATH = os.path.join(SCAN_DIR, "SCAN_examples_{}.txt")
 
 SCAN_DATASET_URL = "https://raw.githubusercontent.com/taczin/SCAN_analogies/main/data/SCAN_dataset.csv"
 
-EXAMPLE_CATEGORIES = ["baseline"]
-
-
 def get_datasets_if_not_present():
     # For SCAN
     if os.path.exists(SCAN_DATASET_FILEPATH):

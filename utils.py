@@ -41,9 +41,9 @@ def save_results(results, evaluation_metrics, filename):
             f.write(output + '\n')
             f.write('\n----------------\n\n')
         f.write("### Evaluation metrics:\n")
-        for metric in evaluation_metrics:
-            f.write(f"- {metric}: {evaluation_metrics[metric]}\n")
-    print("Saved results in file")
+        for category in evaluation_metrics:
+            f.write(f"- {category}: {evaluation_metrics[category]}\n")
+    print(f"Saved results in file: {filename}")
 
 
 class DummyPipeline:
