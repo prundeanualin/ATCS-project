@@ -27,7 +27,7 @@ def prepare_prompt(inference, examples, n_shot: int, cot: bool, include_task_des
         for ex in examples:
             example_answer = ex['analogy_complete']
             if cot:
-                example_answer += ex['analogy_detailed_cot']
+                example_answer += " " + ex['analogy_detailed_cot']
             prompt += example_answer + "\n"
         prompt += "\n" + inference
     return prompt

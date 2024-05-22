@@ -2,7 +2,7 @@ import argparse
 import time
 
 from get_datasets import SCAN_EXAMPLES_FILEPATH
-from prompt_processing.templates import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL, ANALOGY_DESCRIPTION
+from prompt_processing.templates import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL
 from model import LLMObj
 from evaluate import *
 
@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Model')
 parser.add_argument('--tokenizer', type=str, default=None, help="LLM Tokenizer. If not set, will use the HF auto tokenizer loaded from the model's name")
 parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quantization', choices=['None', '4bit'])
-parser.add_argument('--low_cpu_mem_usage', default=True, type=bool, help='Low CPU Memory usage')
+parser.add_argument('--low_cpu_mem_usage', default=True, action=argparse.BooleanOptionalAction, help='Low CPU Memory usage')
 
 parser.add_argument('--seed', type=int, default=1234, help='Random seed to use throughout the pipeline')
 parser.add_argument('--save_filename_details', type=str, default=None, help='Adds more details to the save filename.')
@@ -27,9 +27,9 @@ parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of ex
 # Set the type of examples to use
 parser.add_argument('--example_type', type=str, default='baseline', choices=['baseline', 'detailed', 'simple', 'long', 'short'], help='Few shot number of examples.')
 # description of analogy resolution task
-parser.add_argument('--include_task_description', type=bool, default=False, help='If true, the prompt will also include a brief description of the analogy resolution task.')
+parser.add_argument('--include_task_description', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include a brief description of the analogy resolution task.')
 # use cot
-parser.add_argument('--cot', type=bool, default=False, help='If true, the prompt will also include the CoT instruction.')
+parser.add_argument('--cot', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include the CoT instruction.')
 
 # Control the dataset iteration so that only a subsample of it is run
 # You can choose by analogy type (BATS)
@@ -38,7 +38,7 @@ parser.add_argument('--analogy_type', type=str, default='', help='Analogy type s
 parser.add_argument('--data_start_idx', type=int, default=0, help='The index at which to start picking samples for inference.')
 parser.add_argument('--data_end_idx', type=int, default=-1, help='The index at which to stop picking samples for inference.')
 
-parser.add_argument('--run_on_cpu', type=bool, default=False, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
+parser.add_argument('--run_on_cpu', default=False, action=argparse.BooleanOptionalAction, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
 
 
 args = parser.parse_args()
