@@ -1,7 +1,7 @@
 .idea
 
 # Pycharm cache files
-prompt_templates/__pycache__
+prompt_processing/__pycache__
 __pycache__
 
 # Ignore datasets

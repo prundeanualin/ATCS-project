@@ -1,13 +1,14 @@
 import argparse
 import time
 
-from get_datasets import SCAN_EXAMPLES_FILEPATH, EXAMPLE_CATEGORIES
-from prompt_templates.analogy import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL, ANALOGY_DESCRIPTION
+from get_datasets import SCAN_EXAMPLES_FILEPATH
+from prompt_processing.templates import ANALOGY_TEMPLATE_SIMPLE_INFERENCE, ANALOGY_TEMPLATE_SIMPLE_FULL, ANALOGY_DESCRIPTION
 from model import LLMObj
 from evaluate import *
 
 from transformers import BitsAndBytesConfig
 from datasets import ScanDataloader
+from prompt_processing.prompting import prepare_prompt
 
 from utils import *
 
@@ -23,8 +24,12 @@ parser.add_argument('--save_filename_details', type=str, default=None, help='Add
 # ---- Controlling the prompt ----
 # one-shot/few-shot behaviours
 parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
+# Set the type of examples to use
+parser.add_argument('--example_type', type=str, default='baseline', choices=['baseline', 'detailed', 'simple', 'long', 'short'], help='Few shot number of examples.')
 # description of analogy resolution task
 parser.add_argument('--include_task_description', type=bool, default=False, help='If true, the prompt will also include a brief description of the analogy resolution task.')
+# use cot
+parser.add_argument('--cot', type=bool, default=False, help='If true, the prompt will also include the CoT instruction.')
 
 # Control the dataset iteration so that only a subsample of it is run
 # You can choose by analogy type (BATS)
@@ -52,7 +57,7 @@ dataloader = ScanDataloader(
     shuffle=False,
     analogy_sentence_infer=ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
     analogy_sentence_full=ANALOGY_TEMPLATE_SIMPLE_FULL,
-    examples_file=SCAN_EXAMPLES_FILEPATH.format(EXAMPLE_CATEGORIES[0]),
+    examples_file=SCAN_EXAMPLES_FILEPATH.format(args.example_type),
     examples_shot_nr=args.n_shot
 )
 data_start_idx = args.data_start_idx
@@ -90,32 +95,24 @@ LLM = LLMObj(**LLMObj_args)
 
 # ----- Run inference-----
 durations = []
-
 results = []
-results_filename = f'{args.n_shot}_shot'
-if args.analogy_type:
-    results_filename += f'_{args.analogy_type}'
-if args.data_end_idx > 0:
-    results_filename += f'_[{data_start_idx}-{data_end_idx}]'
-results_filename += f'_{args.model.split("/")[1]}'
-if args.save_filename_details:
-    results_filename = f'{args.save_filename_details}_' + results_filename
 
 print("-- Running the model --")
 
 for i in range(data_start_idx, data_end_idx):
     start = time.time()
     sample = dataloader[i]
-    prompt = sample['inference']
+    if args.analogy_type and sample['analogy_type'] != args.analogy_type:
+        continue
 
-    # Possibly extend the prompt with the task description and some examples
-    if args.include_task_description:
-        prompt = ANALOGY_DESCRIPTION + prompt
-    # In case of one/few-shot, prepend the examples to the prompt
-    if args.n_shot > 0:
-        prompt = "{}\n" * args.n_shot + prompt
-        prompt = prompt.format(*map(lambda x: x['simple'], sample['examples']))
-
+    prompt = prepare_prompt(sample['inference'],
+                            sample['examples'],
+                            n_shot=args.n_shot,
+                            cot=args.cot,
+                            include_task_description=args.include_task_description)
+    print("Prompt is: ")
+    print(prompt)
+    print("---------------\n")
     output = LLM.generate(prompt)
 
     del sample['examples']
@@ -135,5 +132,13 @@ evaluation_results = evaluate(results, SimpleEvaluationStrategy())
 print("Evaluation results:")
 print(evaluation_results)
 
-
+# ----- Saving the results -----
+results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})'
+if args.analogy_type:
+    results_filename += f'_{args.analogy_type}'
+if args.data_end_idx > 0:
+    results_filename += f'_dataidxs[{data_start_idx}-{data_end_idx}]'
+results_filename += f'_{args.model.split("/")[1]}'
+if args.save_filename_details:
+    results_filename = f'{args.save_filename_details}_' + results_filename
 save_results(results, evaluation_results, results_filename)
