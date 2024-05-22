@@ -1,0 +1,149 @@
+atom,solar system,nucleus,sun,,science
+The sun is at center of the solar system. Similarly, the nucleus is located at the center of any atom. Therefore, the answer is nucleus.
+
+atom,solar system,electron,planet,,science
+In the solar system, planet is the main element and spins within the boundary of the system. Similarly, in an atom, electron is one of the main component and spins within the atom. Therefore, the answer is electron.
+
+heat transfer,water flow,kettle,bucket,,science
+Bucket is the tool that can be used to keep water flow inside. Similarly, the kettle is a device that keeps heat transfer inside. Therefore, the answer is kettle. 
+
+heat transfer,water flow,cooling,emptying,,science
+By emptying action, the water flow within a space flows out of it. Similarly, by cooling action, the heat decreases or evaporated. Therefore, the answer is cooling.
+
+heat transfer,water flow,thermodynamics,hydrodynamics,,science
+Hydrodynamics studies the physics of water flow. Similarly, thermodynamics studies the physics of heat transfer. Therefore, the answer is thermodynamics.
+
+sounds,waves,wall,shore,,science
+Waves do not go over a shore. Similarly, sounds cannot be transmitted over the wall. Therefore, the answer is wall.
+
+sounds,waves,echoes,reflects,,science
+When waves encounter a boundary, they reflect. Similarly, when sounds encounter a boundary, they echo. Therefore, the answer is echoes.
+
+sounds,waves,quiet,calm,,science
+An absent state of waves is calm. Similarly, an absent state of sounds is quiet. Therefore, the answer is quiet. 
+
+respiration,combustion,animal,fire,,science
+Combustion leads to fire. Similarly, respiration makes animal alive and existed. Therefore, the answer is animal.
+
+respiration,combustion,breathing,burning,,science
+Combustion is the process that describes the state of burning. Similarly, respiration is the process that describes the state of breathing. Therefore, the answer is breathing.
+
+light,sound,red,low,,science
+Low sound is heard when sound is vibrated at small frequencies. Similarly, red color is observed when light is radiated at low frequencies. Therefore, the answer is red.  
+
+light,sound,violet,high,,science
+High sound is heard when sound is vibrated at high frequencies. Similarly, violet color is observed when light is radiated at high frequencies. Therefore, the answer is red.
+
+light,sound,bright,loud,,science
+We hear the sound loud when its volumn is high. Similarly, we see the light bright when its intensity is high. Therefore, the answer is bright. 
+
+planet,projectile,orbit,trajectory,,science
+Trajectory describes the path of a moving projectile. Similarly, orbit describes the path of a moving planet. Therefore, the answer is orbit.
+
+planet,projectile,sun,earth,,science
+The projectile moves around the earth. Similarly, the planet moves around the sun. Therefore, the answer is sun.
+
+natural selection,artificial selection,species,breeds,,science
+Breeds are developed by delibrate artificial selection. Similarly, species develop via the process of natural selection. Therefore, the answer is species.
+
+natural selection,artificial selection,competition,selection,,science
+Selection is at the core of artificial selection process so that breeds develop. Similarly, competition is at the core of natural selection so that species develop. Therefore, the answer is competition. 
+
+natural selection,artificial selection,mating,breeding,,science
+Breeding is the core process in artificial selection to perpetuate specific traits. Similarly, mating is the core process in natural selection to spread species. Therefore, the answer is mating.
+
+gas molecules,billiard balls,molecules,balls,,science
+Billiard balls is a kind of balls. Similarly, gas molecules is a kind of molecules. Therefore, the answer is molecules.
+
+gas molecules,billiard balls,gas,billiards,,science
+Billiard balls is used in and represents the game of billiards. Similarly, gas molecules exists in and represent the gas. Therefore, the answer is gas.
+
+gas molecules,billiard balls,cold,slow,,science
+Billiard balls can move slow. Similarly, gas molecules can be in cold state. Therefore, the answer is cold.
+
+mind,computer,thinking,processing,,science
+The computer is for processing. Similarly, the mind is for thinking. Therefore, the answer is thinking.
+
+mind,computer,forgetting,erasing,,science
+Erasing is the process of removing data in the computer. Similarly, forgetting is the process of removing information from the mind. Therefore, the answer is forgetting.
+
+bacterial mutation,slot machine,reproducing,winning,,science
+Winning is when we get successful outcome from slot machine. Similarly, reproducing is when good outcome of a bacterial mutation is achieved. Therefore, the answer is reproducing.
+
+bacterial mutation,slot machine,mutating,spinning,,science
+Spinning is the main action done on slot machine. Similarly, mutating is the main action of bacterial mutation. Therefore, the answer is mutating.
+
+accepting a belief,buying an item,believer,buyer,,metaphor
+We call one who buy an item the buyer. Similarly, we call one who accept a certain belief the believer. Therefore, the answer is believer.
+
+accepting a belief,buying an item,belief,merchandise,,metaphor
+Merchadise is what one gets when buying an item. Similarly, belief is what one has when accepting a belief. Therefore, the answer is belief.
+
+accepting a belief,buying an item,advocating,selling,,metaphor
+Someone buys an item because the item is sold. Similarly, someone accepts a belief because the belief is advocated. Therefore, the answer is advocating.
+
+reasons for a theory,grounds for a building,rational,solid,,metaphor
+Having grounds for a building should be solid. Similarly, reasons for a theory should be rational. Therefore, the answer is rational.
+
+reasons for a theory,grounds for a building,theories,buildings,,metaphor
+Grounds for a building make up the buildings. Similarly, reasons for a theory make up the theories. Therefore, the answer is theories.
+
+reasons for a theory,grounds for a building,confirming,supporting,,metaphor
+Strong grounds for a building support the building. Similarly, strong reasons for a theory support the theory. Therefore, the answer is confirming.
+
+difficulties,impediments to travel,person,traveller,,metaphor
+The normal traveller faces impediments to travel. Similarly, the normal person faces difficulties in life. Therefore, the answer is person.
+
+difficulties,impediments to travel,goal,destination,,metaphor
+By overcoming impediments to travel, a traveller reaches the destination. Similarly, by overcoming difficulties, a person reaches the goal. Therefore, the answer is goal.
+
+difficulties,impediments to travel,plan,route,,metaphor
+To overcome impediments to travel, a person needs a route. Similar, to overcome difficulties, a person needs a plan. Therefore, the answer is plan.
+
+time,money,invest,allocate,,metaphor
+Just as one must allocate money to purchase a new item, similarly, engaging in a new activity requires one to invest time, treating it as a valuable resource. Therefore, the answer is invest.
+
+time,money,schedule,budget,,metaphor
+Just as a budget outlines a plan for allocating money, a schedule provides a structured framework for managing time, making the schedule the equivalent of a financial budget. Therefore, the answer is schedule.
+
+time,money,efficient,effective,,metaphor
+If an activity is deemed effective for saving money, similarly, an activity that saves time should be considered efficient, reflecting a valuable use of resources. Therefore, the answer is efficient.
+
+ideas,seeds,inspired,planted,,metaphor
+Just as seeds must be planted to grow and evolve, ideas require inspiration to develop and flourish, embedding potential for growth in fertile minds. Therefore, the answer is inspired.
+
+ideas,seeds,productive,fruitful,,metaphor
+Just as seeds that yield a positive outcome are termed fruitful, ideas that generate positive results are similarly recognized as productive. Therefore, the answer is productive.
+
+ideas,seeds,product,fruit,,metaphor
+Just as the tangible outcome of seeds is represented by fruit, the practical result of ideas is effectively embodied by a product. Therefore, the answer is product.
+
+mind,machine,thinking,working,,metaphor
+Just as a machine must be working to produce an output, the mind needs to be actively thinking to generate results. Therefore, the answer is thinking.
+
+mind,machine,awake,turned on,,metaphor
+Just as a machine must be turned on to function, the mind needs to be awake to operate effectively. Therefore, the answer is awake.
+
+idea,object,understand,hold,,metaphor
+Just as one must hold an object to gauge its weight, one needs to understand an idea fully to appreciate its significance. Therefore, the answer is understand.
+
+idea,object,analyze,weigh,,metaphor
+Just as weighing an object reveals its inner properties, analyzing an idea exposes its underlying characteristics and value. Therefore, the answer is analyze.
+
+understanding,following,understand,follow,,metaphor
+Just as following is the ongoing process of tracking an action, understanding is the continuous deepening of comprehension through engagement and analysis. Therefore, the answer is understand.
+
+understanding,following,speaker,leader,,metaphor
+Just as a successful leader is characterized by the number of people who follow them, a successful speaker is distinguished by the extent to which their audience understands them. Therefore, the answer is speaker.
+
+understanding,seeing,knowledge,light,,metaphor
+Just as light is essential for seeing an object clearly, knowledge is crucial for fully understanding an idea. Therefore, the answer is knowledge.
+
+understanding,seeing,explaining,illuminating,,metaphor
+Just as a source of light is necessary to see an object clearly, a source that explains an idea is essential for understanding it fully. Hence, the key is explaining. Therefore, the answer is explaining.
+
+life,theatre,event,act,,metaphor
+Just as a play in the theatre unfolds through a series of acts, the narrative of life is composed of a sequence of events. Therefore, the answer is event.
+
+life,theatre,people,actors,,metaphor
+Just as actors perform the stories told in the theatre, people enact the narratives of their lives, each playing their unique role. Therefore, the answer is people.

@@ -13,7 +13,9 @@ from prompt_processing.prompting import prepare_prompt
 from utils import *
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct', help='LLM Model')
+parser.add_argument('--model', type=str, default='microsoft/Phi-3-mini-128k-instruct',
+                    choices=['microsoft/Phi-3-mini-128k-instruct', 'berkeley-nest/Starling-LM-7B-alpha', 'meta-llama/Meta-Llama-3-8B-Instruct'],
+                    help='LLM Model')
 parser.add_argument('--tokenizer', type=str, default=None, help="LLM Tokenizer. If not set, will use the HF auto tokenizer loaded from the model's name")
 parser.add_argument('--quantization', type=str, default='4bit', help='LLM Quantization', choices=['None', '4bit'])
 parser.add_argument('--low_cpu_mem_usage', default=True, action=argparse.BooleanOptionalAction, help='Low CPU Memory usage')
