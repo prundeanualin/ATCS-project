@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH --array=1-3
+#SBATCH --partition=gpu_mig
+#SBATCH --gpus=1
+#SBATCH --job-name=SCAN_baseline
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=9
+#SBATCH --time=02:30:00
+#SBATCH --output=/home/scur0248/output/success/%x_%A_%a.out
+#SBATCH --error=/home/scur0248/output/error/%x_%A_%a.err
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+
+# Go to the directory that contains the project, the runnable
+# Your job starts in the directory where you call sbatch
+cd $HOME/project/ATCS-project
+srun python -u run.py
+
+CONFIG_FILE=array_job_config.txt
+PARAMS=`sed -n ${SLURM_ARRAY_TASK_ID}p $CONFIG_FILE`
+
+# Run your code
+srun python -u run.py $PARAMS --save_filename_details=$SLURM_ARRAY_TASK_ID

@@ -57,8 +57,11 @@ dataloader = ScanDataloader(
 )
 data_start_idx = args.data_start_idx
 data_end_idx = args.data_end_idx
-if data_end_idx < 0 or data_end_idx > len(dataloader):
+if data_end_idx < 0:
     data_end_idx = len(dataloader)
+# Check for valid data indices
+if data_end_idx > len(dataloader):
+    raise Exception("Arguments passed are invalid! data_end_idx cannot be greater than dataset size")
 if data_start_idx >= data_end_idx:
     raise Exception("Arguments passed are invalid! data_start_idx must be smaller than data_end_idx")
 
@@ -92,11 +95,11 @@ results = []
 results_filename = f'{args.n_shot}_shot'
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
-if data_end_idx > 0:
+if args.data_end_idx > 0:
     results_filename += f'_[{data_start_idx}-{data_end_idx}]'
 results_filename += f'_{args.model.split("/")[1]}'
 if args.save_filename_details:
-    results_filename += f'_{args.save_filename_details}'
+    results_filename = f'{args.save_filename_details}_' + results_filename
 
 print("-- Running the model --")
 
