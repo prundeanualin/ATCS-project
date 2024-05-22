@@ -16,6 +16,7 @@ EXAMPLE_CATEGORIES = ["baseline"]
 
 # For BATS dataset
 BATS_FOLDER = 'data/BATS'
+BATS_EXAMPLE_FILE = 'data/BATS/BATS_example.pkl'
 
 
 def get_datasets_if_not_present():

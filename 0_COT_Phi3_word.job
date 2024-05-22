@@ -16,13 +16,13 @@ module load Anaconda3/2022.05
 source activate ATCS-project
 # srun python Project/inference.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha"
 # --datasets (default: 'BATS') --BATS_filename --prompt_structure (default: 'by-relation'))  --COT_template (default:False) --number_of_analogy (default:all)
-srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L02 [hypernyms - misc]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L03 [hyponyms - misc]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L04 [meronyms - substance]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L05 [meronyms - member]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L06 [meronyms - part]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L07 [synonyms - intensity]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L08 [synonyms - exact]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L09 [antonyms - gradable]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L10 [antonyms - binary]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 50
+srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L02 [hypernyms - misc]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L03 [hyponyms - misc]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L04 [meronyms - substance]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L05 [meronyms - member]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L06 [meronyms - part]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L07 [synonyms - intensity]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L08 [synonyms - exact]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L09 [antonyms - gradable]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L10 [antonyms - binary]" --prompt_structure "by-target-word" --COT_template "Let's think step by step." --number_of_analogy 10

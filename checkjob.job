@@ -20,3 +20,7 @@ srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" 
 srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --prompt_structure "by-target-word" --number_of_analogy 2
 srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --COT_template "Thinking step by step." --number_of_analogy 2
 srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --prompt_structure "by-target-word" --COT_template "Thinking step by step." --number_of_analogy 1
+
+# for few shot
+# python run.py --dataset BATS-fewshot --BATS_filename 'L07 [synonyms - intensity] sample' --number_of_shot 10 --number_of_analogy 4
+# python run.py --dataset BATS-fewshot --BATS_filename 'L07 [synonyms - intensity] sample' --number_of_shot 10 --number_of_analogy 4 --COT_template " Thinking step by step. " --explanation 'short'

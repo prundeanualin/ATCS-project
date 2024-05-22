@@ -1,3 +1,9 @@
 allosaurus	dinosaur/reptile/bird/archosaur/archosaurian/archosaurian_reptile/
 anaconda	snake/reptile/boa/serpent/ophidian
-ant	insect/invertebrate/
+ant	insect/invertebrate
+beaver	rodent/vertebrate/creature/beast/animal/organism/fauna/placental/chordate/eutherian/mammal/mammalian/eutherian_mammal/gnawer/animate_being/living_thing/placental_mammal/craniate/
+bee	insect/invertebrate/creature/beast/hymenopteran/being/animal/insect/organism/fauna/arthropod/hymenopterous_insect/animate_being/hymenopteron/hymenopter/living_thing
+beetle	insect/invertebrate/creature/beast/being/animal/insect/organism/fauna/arthropod/animate_being/living_thing
+buffalo	bovid/mammal/bison/cow/vertebrate/creature/ungulate/beast/being/animal/organism/fauna/placental/artiodactyl/ruminant/chordate/eutherian/mammalian/bovine/animate_being/eutherian_mammal/placental_mammal/craniate/physical_hoofed_mammal/physical_entity/even-toed_ungulate/artiodactyl_mammal/living_thing
+butterfly	insect/creature/beast/lepidopteran/animal/organism/fauna/arthropod/lepidopterous_insect/lepidopteron/animate_being/living_thing
+cat	feline/beast/animal/organism/fauna/placental/carnivore/chordate/felid/eutherian/mammal/mammalian/eutherian_mammal

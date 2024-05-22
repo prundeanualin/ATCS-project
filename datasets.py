@@ -131,8 +131,16 @@ class ScanDataset(Dataset):
             'analogy_type': analogy_type
         }
 
+
 class BATSDataloader_0shot:
-    def __init__(self, dataFolder, fileName, numberOfAnalogy = False, cot=False, shuffle=False, promptType="by-relation", promptFormat=" If {} is like {}, {} is like ..."):
+    def __init__(self, 
+                 dataFolder, 
+                 fileName, 
+                 numberOfAnalogy = False, 
+                 cot=False, 
+                 shuffle=False, 
+                 promptType="by-relation", 
+                 promptFormat=" If {} is like {}, then {} is like ..."):
         self.dataFolder = dataFolder
         self.fileName = fileName
         self.promptFormat = promptFormat
@@ -175,7 +183,6 @@ class BATSDataloader_0shot:
             os.makedirs(f'{self.dataFolder}/pairs')
         with open(f'{self.dataFolder}/pairs/{self.fileName}.pkl', 'wb') as f:
             pickle.dump(self.pairs, f)
-
 
     def build_prompt(self):
         '''
@@ -225,10 +232,140 @@ class BATSDataloader_0shot:
     def __call__(self):
         if self.shuffle:
             random.shuffle(self.prompt)
-        # return only the number of analogy specified (if does not exceed the total number of analogy)
-        if self.numberOfAnalogy and self.numberOfAnalogy < len(self.pairs):
+        # return only the number of analogy specified
+        if self.numberOfAnalogy:
             return self.prompt[:self.numberOfAnalogy]
         return self.prompt
+    
+
+class BATSDataloader_fewshot:
+    def __init__(
+            self, 
+            dataFolder, 
+            fileName, 
+            numberOfShot = 1, 
+            numberOfAnalogy = False, 
+            cot=False, 
+            shuffle=False,
+            promptType="by-relation", 
+            promptFormat="If {} is like {}, then {} is like ...", 
+            promptFull="If {} is like {}, then {} is like {}. ",
+            explanation=False
+            ):
+        self.dataFolder = dataFolder
+        self.fileName = fileName
+        self.promptFormat = promptFormat
+        start = fileName.find('[') + 1
+        end = fileName.find(']')
+        self.analogyType = fileName[start:end]
+        self.numberOfShot = numberOfShot
+        self.numberOfAnalogy = numberOfAnalogy
+        self.promptType = promptType # promptType: by-relation, by-target-word
+        self.COT = cot
+        self.promptFormat = promptFormat
+        self.promptFull = promptFull
+        self.shuffle = shuffle
+        self.explanation = explanation
+        self.load_pairs()
+        self.build_prompt()
+
+    def load_pairs(self):
+        '''
+        Output: pairs = [[target, source, alternatives, analogyType], [target, source, alternatives, analogyType], ...]
+        '''
+        with open(f'{self.dataFolder}/{self.fileName}.txt', 'r') as f:
+            lines = f.readlines()
+        self.pairs = []
+        for line in lines:
+            target, values = line.strip().split('\t')
+            values = values.split('/')
+            # remove value that have underscore
+            values = [value for value in values if '_' not in value]
+            # only select the first element in value list as label/attribute, the rest are alternatives
+            source = values[0]
+            alternatives = [value for value in values[1:] if value]
+            self.pairs.append([target, source, alternatives, self.analogyType])
+
+    def build_prompt(self):
+        '''
+        Output:
+        '''
+        self.prompt = []
+
+        # load BATS analogy example
+        with open(BATS_EXAMPLE_FILE, 'rb') as f:
+            BATS_example = pickle.load(f)
+
+        if self.promptType == "by-relation":
+            # combination of 2 pairs and generate prompt
+            for pair in combinations(self.pairs, 2):
+                # check if same analogy type
+                is_same_analogy = pair[0][3] == pair[1][3]
+                # select example that have same analogy type
+                analogy_cat = pair[0][3]
+                analogy_cat = analogy_cat.split(' - ')[0] if ' - ' in analogy_cat else analogy_cat
+                example = [sample for sample in BATS_example if sample['analogy_type'] == analogy_cat]
+                # exclude similar example to the current testing analogy
+                example = [sample for sample in example if sample['word_A'] != pair[0][0] and sample['word_B'] != pair[0][1] and sample['word_C'] != pair[1][0]]
+                # skip if examplar is empty
+                if not example or not is_same_analogy:
+                    continue   
+                # select numberOfShot random example (select all if less than numberOfShot)
+                n_shot = self.numberOfShot if len(example) >= self.numberOfShot else len(example)
+                examplars = []
+                for ex in random.sample(example, n_shot):
+                    if self.COT:
+                        ex_question = "Question: " + self.promptFormat.format(ex['word_A'], ex['word_B'], ex['word_C'])
+                        ex_answer = " Answer: " + self.promptFull.format(ex['word_A'], ex['word_B'], ex['word_C'], ex['label'])
+                        ex_reasoning = "The reason is that, " + ex[self.explanation] if self.explanation in ex else ""                    
+                        examplars.append(ex_question + ex_answer + ex_reasoning)
+                    else:
+                        examplars.append(self.promptFull.format(ex['word_A'], ex['word_B'], ex['word_C'], ex['label']))
+                current_test_inference = self.promptFormat.format(pair[0][0], pair[0][1], pair[1][0]) 
+                current_test_inference = self.COT + current_test_inference if self.COT else current_test_inference
+                # join examplars with current inference
+                inference = ''.join(examplars) + current_test_inference
+                self.prompt.append({'inference': inference, 'label': pair[1][1], 'alternatives': pair[1][2], 'analogy_type': pair[0][3]})
+        elif self.promptType == "by-target-word":
+            for pair in combinations(self.pairs, 2):
+                # check if same analogy type
+                is_same_analogy = pair[0][3] == pair[1][3]
+                # select example that have same analogy type
+                analogy_cat = pair[0][3]
+                analogy_cat = analogy_cat.split(' - ')[0] if ' - ' in analogy_cat else analogy_cat
+                example = [sample for sample in BATS_example if sample['analogy_type'] == analogy_cat]
+                # exclude similar example to the current testing analogy
+                example = [sample for sample in example if sample['word_A'] != pair[0][0] and sample['word_B'] != pair[1][0] and sample['word_C'] != pair[0][1]]
+                # skip if examplar is empty or less than numberOfShot
+                if not example or not is_same_analogy:
+                    continue
+                # select numberOfShot random example
+                n_shot = self.numberOfShot if len(example) >= self.numberOfShot else len(example)
+                examplars = []
+                for ex in random.sample(example, n_shot):
+                    if self.COT:
+                        ex_question = "Question: " + self.promptFormat.format(ex['word_A'], ex['word_C'], ex['word_B'])
+                        ex_answer = " Answer: " + self.promptFull.format(ex['word_A'], ex['word_C'], ex['word_B'], ex['label'])
+                        ex_reasoning = "The reason is that, " + ex[self.explanation] if self.explanation in ex else ""
+                        examplars.append(ex_question + ex_answer + ex_reasoning)
+                    else:
+                        examplars.append(self.promptFull.format(ex['word_A'], ex['word_C'], ex['word_B'], ex['label']))
+                current_test_inference = self.promptFormat.format(pair[0][0], pair[1][0], pair[0][1])
+                current_test_inference = self.COT + current_test_inference if self.COT else current_test_inference
+                # join examplars with current inference
+                inference = ''.join(examplars) + current_test_inference
+                self.prompt.append({'inference': inference, 'label': pair[1][1], 'alternatives': pair[1][2], 'analogy_type': pair[0][3]})
+        else:
+            print("Invalid prompt type. Either by-relation or by-target-word")
+
+    def __call__(self):
+        if self.shuffle:
+            random.shuffle(self.prompt)
+        # return only the number of analogy specified (if does not exceed the total number of analogy)
+        if self.numberOfAnalogy:
+            return self.prompt[:self.numberOfAnalogy]
+        return self.prompt
+
 
 if __name__ == '__main__':
     # dataset = ScanDataset(
@@ -251,8 +388,6 @@ if __name__ == '__main__':
         promptType='by-relation', 
         promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE
     )
-
-    # print(BATS_dataset.get_file_name()) # 0shot_L01 [hypernyms - animals] sample_Thinking step by step. _by-relation_If {} is like {}
 
     for id, sample in enumerate(BATS_dataset()):
         print(sample['inference'])

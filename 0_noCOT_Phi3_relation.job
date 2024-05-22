@@ -5,7 +5,7 @@
 #SBATCH --job-name=Phi3_noCOT_relation
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
-#SBATCH --time=30:00:00
+#SBATCH --time=10:00:00
 #SBATCH --output=job_outputs/0shot_noCOT/Phi3_slurm_output_%A_relation.out
 
 module purge
@@ -16,13 +16,13 @@ module load Anaconda3/2022.05
 source activate ATCS-project
 # srun python Project/inference.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha"
 # --datasets (default: 'BATS') --BATS_filename --prompt_structure (default: 'by-relation'))  --COT_template (default:False) --number_of_analogy (default:all)
-srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L02 [hypernyms - misc]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L03 [hyponyms - misc]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L04 [meronyms - substance]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L05 [meronyms - member]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L06 [meronyms - part]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L07 [synonyms - intensity]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L08 [synonyms - exact]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L09 [antonyms - gradable]" --number_of_analogy 50
-srun python run.py --dataset "BATS" --BATS_filename "L10 [antonyms - binary]" --number_of_analogy 50
+srun python run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L02 [hypernyms - misc]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L03 [hyponyms - misc]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L04 [meronyms - substance]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L05 [meronyms - member]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L06 [meronyms - part]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L07 [synonyms - intensity]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L08 [synonyms - exact]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L09 [antonyms - gradable]" --number_of_analogy 10
+srun python run.py --dataset "BATS" --BATS_filename "L10 [antonyms - binary]" --number_of_analogy 10
