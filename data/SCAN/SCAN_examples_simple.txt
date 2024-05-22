@@ -1,0 +1,149 @@
+atom,solar system,nucleus,sun,,science
+Imagine the solar system is like a family with the sun as the parent. All the planets are like kids spinning around the parent. Similarly, in an atom, the nucleus is like the parent, and other tiny things spin around it like kids. Therefore, the answer is nucleus.
+
+atom,solar system,electron,planet,,science
+Okay, think of the solar system like a big family, and the sun is like the grandma or grandpa in the middle. The planets, like Earth, Mars, and Jupiter, are like the kids spinning around them. Now, in an atom, it's a bit like a tiny family too. The nucleus is like the grandma or grandpa, and the electrons are like the little kids spinning around them. Therefore, the answer is electron.
+
+heat transfer,water flow,kettle,bucket,,science
+Imagine you have a big container for water called a bucket. It's like a special metal tool that keeps water in one place when you pour it in. Now, think about a kettle. It's also a metal thing, but instead of water, it holds heat. When you put heat into it, it keeps it all in one place, just like a bucket does with water. Therefore, the answer is kettle.
+
+heat transfer,water flow,cooling,emptying,,science
+Imagine you have a cup full of water, and when you pour out the water, the cup becomes empty. That's what "emptying" means—it's when something is getting rid of what's inside. Now, think about heat. When something cools down, it's like it's getting rid of heat, just like when you pour out water, you're getting rid of it from the cup. Therefore, the answer is cooling.
+
+heat transfer,water flow,thermodynamics,hydrodynamics,,science
+Imagine you have a subject in school that teaches you all about water and how it moves. That's hydrodynamics—learning about water flow. Now, think about another subject that teaches you about heat and how it moves. That's like the cousin of hydrodynamics, and it's called thermodynamics. Therefore, just as hydrodynamics is about water flow, thermodynamics is about heat transfer.
+
+sounds,waves,wall,shore,,science
+Think about when you're at the beach watching waves come in. Waves hit the shore but don't go past it, right? The shore acts like a boundary where the waves stop. Now, for sounds, imagine you're in a room and there's a wall. When sounds reach the wall, they don't go through it; the wall stops them. Therefore, just like the shore stops waves, the wall stops sounds. Therefore, the answer is wall.
+
+sounds,waves,echoes,reflects,,science
+Let's imagine you're throwing a ball against a wall. When the ball hits the wall, it bounces back to you, right? That's like what waves do when they hit something and bounce back, it's called reflection. Now, for sounds, when they hit something, they bounce back too, but we call it echoing instead of reflecting. Therefore, just like a ball reflects off a wall, sounds bounce back, or echo, off surfaces. Therefore, the answer is echoes.
+
+sounds,waves,quiet,calm,,science
+Think about when you're at the beach and the water is very still with no waves at all. We call that calm, right? It's like everything is peaceful and quiet on the surface of the water. Now, for sounds, when everything is hushed and there's no noise around, we say it's quiet. Therefore, just like calm describes the absence of waves, quiet describes the absence of sounds.
+
+respiration,combustion,animal,fire,,science
+Let's picture a campfire. How does it start? It starts with combustion, right? Combustion is what makes the fire. Now, think about animals. How do they come into existence? Through respiration, the process of breathing. Therefore, just as combustion leads to fire, respiration leads to the existence of animals. Therefore, the answer is animal.
+
+respiration,combustion,breathing,burning,,science
+Think about when you light a match and it starts burning, that's combustion—it's the process of something burning. Now, when you're taking in air and letting it out, that's breathing. Therefore, just as combustion is the process of burning, respiration is the process of breathing. Therefore, the answer is breathing.
+
+light,sound,red,low,,science
+Let's think about sounds first. When you hear something low, it's like a deep rumble or a bass note, right? That's because low frequencies make those sounds. Now, for light, when we talk about red, it's like a color with a low frequency in the light spectrum. Therefore, just as low describes sounds with low frequencies, red describes light with low frequencies. Therefore, the answer is red.
+
+light,sound,violet,high,,science
+Imagine you're playing with a big spring. When you shake it really fast, it makes a high sound like a tiny birdie. That's because it's moving quickly, or at a high frequency. Now, for colors, think about violet like the color of a pretty flower. It's at the high end of colors because it's like the spring moving super fast, or at a high frequency. Therefore, just as high means moving fast for sounds, violet means moving fast for colors.
+
+light,sound,bright,loud,,science
+When something makes a lot of noise, we say it's loud. Similarly, when there's a lot of light, we say it's bright. Therefore, just as loud describes a lot of noise, bright describes a lot of light. Therefore, the answer is bright.
+
+planet,projectile,orbit,trajectory,,science
+Think about when you throw a ball—it follows a certain path, right? That's called its trajectory. Now, for planets like Earth or Mars, they also move around, and the path they follow is called an orbit. Therefore, just like the trajectory is the path for a thrown ball, the orbit is the path for a planet. Therefore, the answer is orbit.
+
+planet,projectile,sun,earth,,science
+Let's pretend you're playing with a toy car. When you push the car, it moves, right? That's because you're giving it a little push. Now, think about how the Earth moves around in space. It's like a big toy car, but instead of you pushing it, the Sun pulls it with something called gravity. Therefore, just like you push the toy car, the Sun pushes the Earth to move around. Therefore, the answer is sun.
+
+natural selection,artificial selection,species,breeds,,science
+Imagine you have a bunch of different kinds of dogs, like poodles, golden retrievers, and bulldogs. When people pick certain traits they like, like curly hair or a big size, and breed dogs with those traits, it's called artificial selection. And the different kinds of dogs they make, like poodles or bulldogs, are called breeds. Now, for natural selection, it's like when animals in the wild have certain traits that help them survive, like long necks for reaching food. Over time, those traits become more common, and eventually, new types of animals, like giraffes, emerge. These new types are called species. Therefore, just as breeds come from artificial selection, species come from natural selection. Therefore, the answer is species.
+
+natural selection,artificial selection,competition,selection,,science
+When people choose certain traits for plants or animals, it's called artificial selection. Similarly, in nature, it's like there's a competition among plants and animals to see which ones survive the best. Therefore, just as artificial selection involves picking traits, natural selection is like a big competition where only the best traits win. Therefore, the answer is competition.
+
+natural selection,artificial selection,mating,breeding,,science
+Think about when people choose which dogs or plants to breed together to get certain traits they like—that's breeding. Now, in nature, animals and plants find mates to reproduce, and sometimes certain traits make them more attractive to potential mates. Therefore, just as breeding is about choosing traits in artificial selection, mating is how traits get passed on in natural selection. Therefore, the answer is mating.
+
+gas molecules,billiard balls,molecules,balls,,science
+Imagine you have a bunch of balls for playing games like billiards—they're special balls made for that game. Now, think about gas molecules—they're special molecules that are in a gas state, kind of like how billiard balls are made for playing billiards. Therefore, just as billiard balls are special balls for a game, gas molecules are special molecules in a gas state. Therefore, the answer is molecules.
+
+gas molecules,billiard balls,gas,billiards,,science
+Billiard balls are the special balls we use to play billiards, and gas molecules are the special molecules found in gases. Therefore, just as billiard balls are used for billiards, gas molecules are found in gases. The answer is gas.
+
+gas molecules,billiard balls,cold,slow,,science
+When we talk about billiard balls moving slowly, we're describing their speed. Similarly, when gas molecules are moving slowly, we don't describe them as "cold," but rather as having lower kinetic energy or being at a lower temperature. Cold is more about how we feel the temperature around us, not how fast molecules are moving. So the answer would be cold.
+
+mind,computer,thinking,processing,,science
+Imagine your brain is like a super smart computer. It's always working, just like a computer processes information. Therefore, when you're thinking about stuff, your brain is like the computer processing all the information. Therefore, just as computers process stuff, our minds do the thinking. Therefore, the answer is thinking.
+
+mind,computer,forgetting,erasing,,science
+When you erase something on the computer, it's like removing information or data. Similarly, when you forget something, it's like your brain is getting rid of information or memories. Therefore, just as erasing removes data from a computer, forgetting removes memories from the mind. Therefore, the answer is forgetting.
+
+bacterial mutation,slot machine,reproducing,winning,,science
+When you play a slot machine and you win, that's the successful outcome you're hoping for. Similarly, when a bacteria mutates and reproduces successfully, that's its successful outcome. Therefore, just as winning is the successful outcome of playing a slot machine, reproducing is the successful outcome of bacterial mutation. Therefore, the answer is reproducing.
+
+bacterial mutation,slot machine,mutating,spinning,,science
+Imagine you have a toy with a wheel that you can spin around and around. That's called spinning. Now, think about tiny living things called bacteria. Sometimes they change a little bit, like how your toy spins. That's called mutating. Therefore, just as spinning is what the toy does, mutating is what bacteria do. Therefore, the answer is mutating.
+
+accepting a belief,buying an item,believer,buyer,,metaphor
+When you buy something, you're the one doing the action—you're the buyer. Similarly, when you accept a belief, you're the one doing the action again, so you're the believer. Therefore, just as the buyer is the one who buys something, the believer is the one who accepts a belief. Therefore, the answer is believer.
+
+accepting a belief,buying an item,belief,merchandise,,metaphor
+Imagine you're going to a store and picking out something you want to buy, like a toy or a snack. That thing you're buying is called merchandise—it's what you're getting. Now, when you believe in something, like being kind or helping others, that idea is called a belief. Therefore, just as merchandise is what you get when you buy something, belief is what you have when you accept something as true. Therefore, the answer is belief.
+
+accepting a belief,buying an item,advocating,selling,,metaphor
+When you buy something, there's someone else involved who's selling it to you. That's the seller—they're the ones doing the selling. Now, when you accept a belief, someone might be telling you about it or encouraging you to believe in it. That's called advocating. Therefore, just as selling is what the seller does when you buy something, advocating is what someone does when they want you to accept a belief. Therefore, the answer is advocating.
+
+reasons for a theory,grounds for a building,rational,solid,,metaphor
+When you build a house, you need solid ground to make sure the house stays strong and doesn't fall down. Similarly, when you have reasons for a theory, it makes the theory strong and reasonable. Therefore, just as solid ground makes a building strong, having reasons makes a theory rational. Therefore, the answer is rational.
+
+reasons for a theory,grounds for a building,theories,buildings,,metaphor
+When we talk about grounds for a building, we're focusing on the context related to buildings. Similarly, when we talk about reasons for a theory, we're focusing on the context related to theories. Therefore, just as grounds relate to buildings, reasons relate to theories. Therefore, the answer is theories.
+
+reasons for a theory,grounds for a building,confirming,supporting,,metaphor
+When you have grounds for building something, like a strong foundation, it supports the building. Similarly, when you have reasons for a theory, like evidence or logic, they support or confirm the theory. Therefore, just as grounds support a building, reasons confirm a theory. Therefore, the answer is confirming.
+
+difficulties,impediments to travel,person,traveller,,metaphor
+When someone faces impediments to travel, like roadblocks or delays, it's the traveller who deals with those challenges. Similarly, when someone faces difficulties in general, it's a person who faces them. Therefore, just as travellers deal with impediments to travel, people deal with difficulties. Therefore, the answer is person.
+
+difficulties,impediments to travel,goal,destination,,metaphor
+Before facing impediments to travel, you need to have a destination in mind—a place you want to go. Similarly, before encountering difficulties, you need to have a goal—a thing you want to achieve. Therefore, just as a destination is where you're heading when you travel, a goal is what you're aiming for when you face difficulties. Therefore, the answer is goal.
+
+difficulties,impediments to travel,plan,route,,metaphor
+When someone faces difficulties in traveling, like road closures or bad weather, they might need to find a different route to reach their destination. Similarly, when someone faces difficulties in achieving a goal, they might need to come up with a new plan to succeed. Therefore, just as finding a new route helps overcome travel difficulties, coming up with a new plan helps overcome other types of difficulties. Therefore, the answer is plan.
+
+time,money,invest,allocate,,metaphor
+When someone wants to buy something, they allocate, or set aside, money for it. Similarly, when someone wants to start a new activity or project, they invest, or set aside, time for it. Therefore, just as allocating money is setting it aside for a specific purpose, investing time is setting it aside for a specific activity. Therefore, the answer is invest.
+
+time,money,schedule,budget,,metaphor
+A budget helps you plan how to spend your money wisely, and a schedule helps you plan how to spend your time wisely. Therefore, just as a budget is a structured plan for spending money, a schedule is a structured plan for spending time. Therefore, the answer is schedule.
+
+time,money,efficient,effective,,metaphor
+When something works well for saving money, it's effective. Similarly, when something works well for saving time, it's efficient. Therefore, just as effective means it works for saving money, efficient means it works for saving time. Therefore, the answer is efficient.
+
+ideas,seeds,inspired,planted,,metaphor
+Just like seeds need to be planted in soil to grow into plants, ideas need to be inspired in our minds to grow and develop. Therefore, just as planting helps seeds grow, being inspired helps ideas grow. Therefore, the answer is inspired.
+
+ideas,seeds,productive,fruitful,,metaphor
+When seeds lead to a positive outcome, like growing into healthy plants with lots of fruit, they're called fruitful. Similarly, when ideas lead to a positive outcome, like achieving goals or solving problems, they're called productive. Therefore, just as fruitful means a positive outcome for seeds, productive means a positive outcome for ideas. Therefore, the answer is productive.
+
+ideas,seeds,product,fruit,,metaphor
+When seeds grow, they produce fruit—like apples or oranges. Similarly, when ideas are put into action, they produce products—like a new invention or a piece of art. Therefore, just as fruit comes from seeds, products come from ideas. Therefore, the answer is product.
+
+mind,machine,thinking,working,,metaphor
+Imagine you have a machine that makes toys and treats. When the machine is working, it can make all sorts of fun stuff. Now, think about your brain—it's like a super special machine too! When your brain is thinking, it can come up with all kinds of cool ideas and thoughts. Therefore, just as the machine needs to be working to create stuff, your brain needs to be thinking to come up with neat ideas. Therefore, the answer is thinking.
+
+mind,machine,awake,turned on,,metaphor
+Imagine you have a switch on a lamp. Before the lamp can shine light, you have to turn the switch on. That's like waking up the lamp! Now, think about your mind—it's like a lamp too! Before it can start working and thinking, it needs to be awake, just like turning on the lamp. Therefore, just as turning on the lamp makes it ready to shine light, being awake makes your mind ready to think. Therefore, the answer is awake!
+
+idea,object,understand,hold,,metaphor
+Imagine you have a mysterious box. Before you can know what's inside, you have to hold it and feel its weight, right? That's like understanding the box! Now, think about an idea—it's like a mysterious box too! Before you can grasp what the idea is about, you have to understand it, just like holding the box. Therefore, just as holding the box helps you know its weight, understanding an idea helps you know its meaning. Therefore, the answer is understand.
+
+idea,object,analyze,weigh,,metaphor
+Imagine you have a special scale. Before you can know the weight of an object, you have to put it on the scale and weigh it, right? That's like analyzing the object! Now, think about an idea—it's like a special object too! Before you can understand all its parts and meanings, you have to analyze it, just like weighing the object. Therefore, just as weighing an object helps you know its weight, analyzing an idea helps you know its inner properties. Therefore, the answer is analyze.
+
+understanding,following,understand,follow,,metaphor
+Imagine you're playing a game of follow the leader. When you follow someone, you keep doing what they do, right? That's like understanding! Now, think about understanding stuff—it's like following along with what someone is saying or doing, but in your mind. Therefore, just as following means doing what someone else does, understanding means following along with what someone else is saying or doing in your head. Therefore, the answer is understand!
+
+understanding,following,speaker,leader,,metaphor
+When someone leads, others follow them. Similarly, when someone speaks well, others understand them. Therefore, just as a leader has followers, a speaker has listeners who understand them. Therefore, the answer is speaker.
+
+understanding,seeing,knowledge,light,,metaphor
+When you look at something, you need light to see it. Similarly, when you understand an idea, you need knowledge about it. Therefore, just as light helps you see things, knowledge helps you understand ideas. Therefore, the answer is knowledge.
+
+understanding,seeing,explaining,illuminating,,metaphor
+Just like how you need a light to see something clearly, you need someone to explain an idea for you to understand it clearly. Therefore, just as a light illuminates what you see, someone explaining an idea helps you understand it. Therefore, the answer is explaining.
+
+life,theatre,event,act,,metaphor
+Imagine a big building where people put on shows and act out stories—that's a theatre. Now, think about life, like your day-to-day adventures and experiences. They're kind of like a big play happening all around you! Just like in a play, where actors do different acts to tell the story, in life, different things happen that make up your day, like going to school or playing with friends. Therefore, just as a theatre is where stories happen, an act is like an event.
+
+life,theatre,people,actors,,metaphor
+Imagine life is like a giant stage, and everywhere you look, there are stories unfolding, just like in a theatre. Now, think about the people around you—they're the actors in this big play called life! Just like actors bring characters to life on stage, people bring their own stories and adventures to life in the world. Therefore, just as actors perform in a theatre, people perform in the grand theatre of life. Therefore, the answer is people.
