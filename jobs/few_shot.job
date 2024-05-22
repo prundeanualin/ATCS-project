@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=2
+#SBATCH --job-name=Star_fewshot
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=24:00:00
+#SBATCH --output=job_outputs/fewshot/%x_%A.out
+#SBATCH --error=job_outputs/fewshot_error/%x_%A.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+
+# for few shot, default model = Phi3-mini
+srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity]" --number_of_shot 2 --number_of_analogy 50
+srun python -u ../run.py --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity]" --number_of_shot 10 --number_of_analogy 4 --COT_template " Let's think step by step. " --explanation 'short' --number_of_shot 1 --number_of_analogy 50
