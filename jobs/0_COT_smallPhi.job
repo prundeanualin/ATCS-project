@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=2
+#SBATCH --job-name=Phismall_C_5
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=30:00:00
+#SBATCH --output=job_outputs/0shot_COT/%x_%A_relation.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+# srun python Project/inference.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha"
+# srun python Project/inference.py --model "meta-llama/Meta-Llama-3-8B-Instruct" --tokenizer "meta-llama/Meta-Llama-3-8B-Instruct"
+# --datasets (default: 'BATS') --BATS_filename --prompt_structure (default: 'by-relation'))  --COT_template (default:False) --number_of_analogy (default:all)
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L02 [hypernyms - misc]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L03 [hyponyms - misc]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L04 [meronyms - substance]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L05 [meronyms - member]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L06 [meronyms - part]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L07 [synonyms - intensity]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L08 [synonyms - exact]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L09 [antonyms - gradable]" --COT_template "Let's think step by step." --number_of_analogy 50
+srun python ../run.py --model "microsoft/Phi-3-small-128k-instruct" --tokenizer "microsoft/Phi-3-small-128k-instruct" --dataset "BATS" --BATS_filename "L10 [antonyms - binary]" --COT_template "Let's think step by step." --number_of_analogy 50
