@@ -26,4 +26,4 @@ CONFIG_FILE=config_array_job.txt
 PARAMS=`sed -n ${SLURM_ARRAY_TASK_ID}p $CONFIG_FILE`
 
 # Run your code
-srun python -u run.py $PARAMS --save_filename_details=$SLURM_ARRAY_TASK_ID
+srun python -u run.py $PARAMS
