@@ -11,6 +11,20 @@ class EvaluationStrategy:
         raise NotImplementedError
 
 
+class RegexEvaluationStrategy(EvaluationStrategy):
+    def __init__(self):
+        super().__init__()
+
+    def evaluate(self, generated_text: str, label: str, alternative_labels: list[str]):
+        labels = [i.lower() for i in alternative_labels + [label]]
+    
+        for label_i in labels:
+            x = re.findall(rf'\b{label_i}+?(s\b|\b)', generated_text.lower())
+            if x:
+                return 1
+        return 0
+
+
 class SimpleEvaluationStrategy(EvaluationStrategy):
     def __init__(self):
         super().__init__()
