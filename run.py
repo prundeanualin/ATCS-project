@@ -130,7 +130,7 @@ print("Inference duration(sec): total - %.2f, avg - %.2f, max - %.2f, min - %.2f
 
 # ----- Evaluate -----
 print("-- Evaluating the model --")
-evaluation_results = evaluate(results, SimpleEvaluationStrategy())
+evaluation_results = evaluate(results, RegexEvaluationStrategy())
 print("Evaluation results:")
 print(evaluation_results)
 
