@@ -133,7 +133,7 @@ results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
 if args.baseline:
-    results_filename += f'_baseline'
+    results_filename += f'_STbaseline'
 results_filename += f'_{args.model.split("/")[1]}'
 if args.save_filename_details:
     results_filename = f'{args.save_filename_details}_' + results_filename

@@ -12,7 +12,7 @@ BASELINE_INDICATION = """
 Respond only with the answer! Give no explanation and no other words, apart from the answer!
 """
 
-STRUCTURED_BASELINE_INDICATION = BASELINE_INDICATION + """
+STRUCTURED_BASELINE_INDICATION = """
 Question: If A is like B, then C is like ...
 Answer: If A is like B, then C is like D
 
