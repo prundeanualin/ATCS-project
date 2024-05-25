@@ -24,14 +24,15 @@ parser.add_argument('--seed', type=int, default=1234, help='Random seed to use t
 parser.add_argument('--save_filename_details', type=str, default=None, help='Adds more details to the save filename.')
 
 # ---- Controlling the prompt ----
-# one-shot/few-shot behaviours
-parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
-# Set the type of examples to use
-parser.add_argument('--example_type', type=str, default='baseline', choices=['baseline', 'complex', 'simple', 'long', 'short'], help='Few shot number of examples.')
+parser.add_argument('--baseline', default=False, action=argparse.BooleanOptionalAction, help='If true, will prompt the model to respond short and direct.')
+parser.add_argument('--cot', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include the CoT instruction.')
 # description of analogy resolution task
 parser.add_argument('--include_task_description', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include a brief description of the analogy resolution task.')
 # use cot
-parser.add_argument('--cot', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include the CoT instruction.')
+# one-shot/few-shot behaviours
+parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
+# Set the type of examples to use
+parser.add_argument('--example_type', type=str, default='baseline', choices=['baseline', 'complex', 'simple', 'long', 'short'], help='The type of detailed examples to use in few-shot. This has an effect only if cot is True!')
 
 # Control the dataset iteration so that only a subsample of it is run
 # You can choose by analogy type (BATS)
@@ -99,6 +100,7 @@ for i, sample in enumerate(dataloader):
     prompt = prepare_prompt(sample['inference'],
                             sample['examples'],
                             n_shot=args.n_shot,
+                            baseline=args.baseline,
                             cot=args.cot,
                             include_task_description=args.include_task_description)
     if i in save_prompt_at_iterations:
@@ -107,7 +109,7 @@ for i, sample in enumerate(dataloader):
     # print("Prompt is: ")
     # print(prompt)
     # print("---------------\n")
-    output = LLM.generate(prompt)
+    output = LLM.generate(prompt, max_length=10 if args.baseline else 256)
 
     del sample['examples']
     results.append([sample, output])
@@ -130,6 +132,8 @@ print(evaluation_results)
 results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
+if args.baseline:
+    results_filename += f'_baseline'
 results_filename += f'_{args.model.split("/")[1]}'
 if args.save_filename_details:
     results_filename = f'{args.save_filename_details}_' + results_filename
