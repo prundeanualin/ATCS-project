@@ -28,12 +28,16 @@ def seed_experiments(seed):
     np.random.seed(seed)
 
 
-def save_results(results, evaluation_metrics, filename):
+def save_results(results, evaluation_metrics, prompts, filename):
     detailed_save_file = os.path.join(SAVE_DIR, f'{filename}.pl')
     readable_save_file = os.path.join(SAVE_DIR, f'{filename}.txt')
     with open(detailed_save_file, 'wb') as f:
         pickle.dump(results, f)
     with open(readable_save_file, 'w') as f:
+        f.write("-- Some of the prompts that have been fed to the model")
+        for p in prompts:
+            f.write(p + '\n===========\n')
+        f.write("============================================\n\n")
         for sample, output in results:
             f.write("- Inference:             " + sample['inference'] + '\n')
             f.write(f"- Label & alternatives:  {sample['label']} - {sample['alternatives']}" + '\n')

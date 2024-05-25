@@ -35,10 +35,7 @@ parser.add_argument('--cot', default=False, action=argparse.BooleanOptionalActio
 
 # Control the dataset iteration so that only a subsample of it is run
 # You can choose by analogy type (BATS)
-parser.add_argument('--analogy_type', type=str, default='', help='Analogy type selection.')
-# Or you can choose by index interval (SCAN)
-parser.add_argument('--data_start_idx', type=int, default=0, help='The index at which to start picking samples for inference.')
-parser.add_argument('--data_end_idx', type=int, default=-1, help='The index at which to stop picking samples for inference.')
+parser.add_argument('--analogy_type', type=str, default=None, help='Analogy type selection.')
 
 parser.add_argument('--run_on_cpu', default=False, action=argparse.BooleanOptionalAction, help='If running on cpu, there will be a dummy pipeline created, since quantization is not supported on cpu. No real model inference will hapen!')
 
@@ -62,15 +59,6 @@ dataloader = ScanDataloader(
     examples_file=SCAN_EXAMPLES_FILEPATH.format(args.example_type),
     examples_shot_nr=args.n_shot
 )
-data_start_idx = args.data_start_idx
-data_end_idx = args.data_end_idx
-if data_end_idx < 0:
-    data_end_idx = len(dataloader)
-# Check for valid data indices
-if data_end_idx > len(dataloader):
-    raise Exception("Arguments passed are invalid! data_end_idx cannot be greater than dataset size")
-if data_start_idx >= data_end_idx:
-    raise Exception("Arguments passed are invalid! data_start_idx must be smaller than data_end_idx")
 
 # ----- Prepare model arguments -----
 quantization = None
@@ -98,12 +86,13 @@ LLM = LLMObj(**LLMObj_args)
 # ----- Run inference-----
 durations = []
 results = []
+prompts = []
+save_prompt_at_iterations = [0, int(len(dataloader) / 4), int(len(dataloader) / 2), 3 * int(len(dataloader) / 4)]
 
 print("-- Running the model --")
 
-for i in range(data_start_idx, data_end_idx):
+for i, sample in enumerate(dataloader):
     start = time.time()
-    sample = dataloader[i]
     if args.analogy_type and sample['analogy_type'] != args.analogy_type:
         continue
 
@@ -112,6 +101,9 @@ for i in range(data_start_idx, data_end_idx):
                             n_shot=args.n_shot,
                             cot=args.cot,
                             include_task_description=args.include_task_description)
+    if i in save_prompt_at_iterations:
+        prompts.append(prompt)
+        print("Prompt is: ", prompt)
     # print("Prompt is: ")
     # print(prompt)
     # print("---------------\n")
@@ -123,7 +115,7 @@ for i in range(data_start_idx, data_end_idx):
     end = time.time()
     duration = end - start
     durations.append(duration)
-    print(f"Iteration index {i}/{data_end_idx - 1}: %.2f sec" % duration)
+    print(f"Iteration index {i}/{len(dataloader) - 1}: %.2f sec" % duration)
 
 d = np.array(durations)
 print("Inference duration(sec): total - %.2f, avg - %.2f, max - %.2f, min - %.2f" % (d.sum(), d.mean(), d.max(), d.min()))
@@ -138,9 +130,7 @@ print(evaluation_results)
 results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
-if args.data_end_idx > 0:
-    results_filename += f'_dataidxs[{data_start_idx}-{data_end_idx}]'
 results_filename += f'_{args.model.split("/")[1]}'
 if args.save_filename_details:
     results_filename = f'{args.save_filename_details}_' + results_filename
-save_results(results, evaluation_results, results_filename)
+save_results(results, evaluation_results, prompts, results_filename)

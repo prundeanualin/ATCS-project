@@ -1,5 +1,6 @@
 import pandas as pd
 import nltk
+import regex as re
 
 nltk.download('punkt')
 

@@ -18,4 +18,4 @@ source activate ATCS-project
 
 # Go to the directory that contains the project, the runnable
 cd $HOME/project/ATCS-project
-srun python -u run.py --n_shot=1 --model="meta-llama/Meta-Llama-3-8B-Instruct" --example_type=long
+srun python -u run.py --n_shot=1 --model="meta-llama/Meta-Llama-3-8B-Instruct" --example_type=long --cot
