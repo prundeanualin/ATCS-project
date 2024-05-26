@@ -129,7 +129,7 @@ print("Evaluation results:")
 print(evaluation_results)
 
 # ----- Saving the results -----
-results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
+results_filename = f'{args.n_shot}shot_LASTcot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
 if args.baseline:

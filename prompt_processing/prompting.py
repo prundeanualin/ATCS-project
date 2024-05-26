@@ -16,9 +16,8 @@ def prepare_prompt(inference, examples, n_shot: int, baseline: bool, cot: bool, 
             prompt += BASELINE_INDICATION + inference
         # Possibly add CoT instruction only if it is zero-shot
         elif cot:
-            prompt += COT_INSTRUCTION
-            # Finally, add the to-be-completed analogy at the end
-            prompt += inference
+            prompt += inference + " " + COT_INSTRUCTION
+            # prompt += inference
         else:
             prompt += inference
     # In case of one/few-shot, prepend the examples to the prompt
