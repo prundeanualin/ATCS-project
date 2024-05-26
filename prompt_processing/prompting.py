@@ -12,7 +12,8 @@ def prepare_prompt(inference, examples, n_shot: int, baseline: bool, cot: bool, 
     if n_shot == 0:
         # Add instruction to force short, direct answer
         if baseline:
-            prompt += STRUCTURED_BASELINE_INDICATION.format(inference)
+            # prompt += STRUCTURED_BASELINE_INDICATION.format(inference)
+            prompt += BASELINE_INDICATION + inference
         # Possibly add CoT instruction only if it is zero-shot
         elif cot:
             prompt += COT_INSTRUCTION
