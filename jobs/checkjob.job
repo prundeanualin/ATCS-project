@@ -24,3 +24,32 @@ srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals
 # for few shot
 srun python ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity]" --number_of_shot 4 --number_of_analogy 4
 srun python ../run.py --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity] sample" --number_of_shot 10 --number_of_analogy 4 --COT_template "Let's think step by step. " --explanation 'short' --number_of_shot 1
+
+
+
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=test
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=30:00:00
+#SBATCH --output=job_outputs/test/slurm_output_%A.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+# srun python Project/inference.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha"
+
+# zero shot
+# --datasets (default: 'BATS') --BATS_filename --prompt_structure (default: 'by-relation'))  --COT_template (default:False) --number_of_analogy (default:all)
+srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 20
+srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --COT_template "Let's think step by step. " --number_of_analogy 20
+
+# few shot
+srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity]" --number_of_shot 2 --number_of_analogy 10
+srun python -u ../run.py --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity]" --number_of_shot 10 --number_of_analogy 4 --COT_template " Let's think step by step. Question: " --explanation 'short' --number_of_shot 1 --number_of_analogy 10
