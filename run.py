@@ -30,12 +30,12 @@ parser.add_argument('--prompt_structure', type=str, default='by-relation', help=
 parser.add_argument('--COT_template', default = False, type=lambda x: False if x.lower() == 'false' else x, help='If True, will use COT template')
 parser.add_argument('--number_of_analogy', default = False, type=lambda x: False if x.lower() == 'false' else int(x), help='Number of analogy to do inference on')
 parser.add_argument('--number_of_shot', default = 1, type=int, help='Number of shot for BATS dataset in few-shot learning')
-parser.add_argument('--explanation', default = False, type=lambda x: False if x.lower() == 'false' else x, help='If True, will include explanation in the inference')
+parser.add_argument('--explanation', default = "baseline", type=str, choices=['baseline', 'short', 'long', 'detailed', 'simple'], help='Explanation type for few-shot learning')
 args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
 
-# CHANGE HF_TOKEN TO YOUR OWN TOKEN
+CHANGE HF_TOKEN TO YOUR OWN TOKEN
 os.environ['HF_TOKEN'] = "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"
 os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '1'
 
@@ -80,7 +80,6 @@ elif args.dataset == 'BATS-fewshot':
 else:
     raise ValueError("Dataset not supported")
 
-
 # ----- Prepare model arguments -----
 quantization = None
 if args.quantization == '4bit':
@@ -116,19 +115,19 @@ if args.dataset == 'SCAN':
         pickle.dump(results, f)
 elif args.dataset == 'BATS':
     for i, sample in tqdm(enumerate(BATS_dataset())):
-        output = LLM.generate(sample['inference'])
+        output = LLM.generate(sample['inference'], max_length=300 if args.COT_template else 100)
         results.append([sample, output])
     model = args.model.split("/")[1]
     file_name = BATS_dataset.get_file_name()
     n_analogy = args.number_of_analogy if args.number_of_analogy else 1
     if not os.path.exists(f'{SAVE_BATS_DIR}/0_shot_{model}'):
         os.makedirs(f'{SAVE_BATS_DIR}/0_shot_{model}')
-    save_file = os.path.join(f'{SAVE_BATS_DIR}/0_shot_{model}', f'{file_name}_{n_analogy}_generated_prompts_per_cat.pl')
+    save_file = os.path.join(f'{SAVE_BATS_DIR}/0_shot_{model}', f'{file_name}_{n_analogy}_analogies_per_cat.pl')
     with open(save_file, 'wb') as f:
         pickle.dump(results, f)
 elif args.dataset == 'BATS-fewshot':
     for i, sample in tqdm(enumerate(BATS_dataset())):
-        output = LLM.generate(sample['inference'])
+        output = LLM.generate(sample['inference'], max_length=300 if args.COT_template else 100)
         results.append([sample, output])
     model = args.model.split("/")[1]
     file_name = BATS_dataset.get_file_name()
@@ -136,7 +135,8 @@ elif args.dataset == 'BATS-fewshot':
     n_analogy = args.number_of_analogy
     if not os.path.exists(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}'):
         os.makedirs(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}')
-    save_file = os.path.join(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}', f'{file_name}_{n_analogy}_generated_prompts_per_cat.pl')
+    save_file = os.path.join(f'{SAVE_BATS_DIR}/{n_shot}_shot_{model}', f'{file_name}_{n_analogy}_analogies_per_cat.pl')
+    print(save_file)
     with open(save_file, 'wb') as f:
         pickle.dump(results, f)
 else:

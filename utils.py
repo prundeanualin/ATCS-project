@@ -3,8 +3,8 @@ import numpy as np
 import random
 import os
 
-SAVE_DIR = "results/SCAN"
-SAVE_BATS_DIR = "results/BATS"
+SAVE_DIR = "../results/SCAN"
+SAVE_BATS_DIR = "../results/BATS"
 
 def seed_experiments(seed):
     """

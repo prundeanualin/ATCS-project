@@ -250,7 +250,7 @@ class BATSDataloader_fewshot:
             promptType="by-relation", 
             promptFormat="If {} is like {}, then {} is like ...", 
             promptFull="If {} is like {}, then {} is like {}. ",
-            explanation=False
+            explanation="baseline"
             ):
         self.dataFolder = dataFolder
         self.fileName = fileName
@@ -358,6 +358,11 @@ class BATSDataloader_fewshot:
         else:
             print("Invalid prompt type. Either by-relation or by-target-word")
 
+    def get_file_name(self):
+        return f"{self.fileName}_{self.explanation}_{self.numberOfShot}_shot"
+        # prompt_condition = self.promptFormat.split(",")[0]
+        # return f"{self.fileName}_{self.COT if self.COT else 'no_COT'}_{self.promptType}_{prompt_condition}"
+    
     def __call__(self):
         if self.shuffle:
             random.shuffle(self.prompt)
