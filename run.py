@@ -25,10 +25,11 @@ parser.add_argument('--save_filename_details', type=str, default=None, help='Add
 
 # ---- Controlling the prompt ----
 parser.add_argument('--baseline', default=False, action=argparse.BooleanOptionalAction, help='If true, will prompt the model to respond short and direct.')
+# use cot
 parser.add_argument('--cot', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include the CoT instruction.')
+parser.add_argument('--special_instruction', default='', type=str, choices=["cot_few_structured"], help='Some special instruction to test in the code.')
 # description of analogy resolution task
 parser.add_argument('--include_task_description', default=False, action=argparse.BooleanOptionalAction, help='If true, the prompt will also include a brief description of the analogy resolution task.')
-# use cot
 # one-shot/few-shot behaviours
 parser.add_argument('--n_shot', type=int, default=0, help='Few shot number of examples.')
 # Set the type of examples to use
@@ -102,14 +103,15 @@ for i, sample in enumerate(dataloader):
                             n_shot=args.n_shot,
                             baseline=args.baseline,
                             cot=args.cot,
-                            include_task_description=args.include_task_description)
+                            include_task_description=args.include_task_description,
+                            special_instruction=args.special_instruction)
     if i in save_prompt_at_iterations:
         prompts.append(prompt)
         print("Prompt is: ", prompt)
     # print("Prompt is: ")
     # print(prompt)
     # print("---------------\n")
-    output = LLM.generate(prompt, max_length=300 if args.cot else 100)
+    output = LLM.generate(prompt, max_length=300 if args.cot else 50)
 
     del sample['examples']
     results.append([sample, output])
@@ -129,7 +131,7 @@ print("Evaluation results:")
 print(evaluation_results)
 
 # ----- Saving the results -----
-results_filename = f'{args.n_shot}shot_LASTcot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
+results_filename = f'{args.n_shot}shot_cot({args.cot})_description({args.include_task_description})_examples({args.example_type})'
 if args.analogy_type:
     results_filename += f'_{args.analogy_type}'
 if args.baseline:
@@ -137,4 +139,6 @@ if args.baseline:
 results_filename += f'_{args.model.split("/")[1]}'
 if args.save_filename_details:
     results_filename = f'{args.save_filename_details}_' + results_filename
+if args.special_instruction:
+    results_filename = f'{args.special_instruction}_' + results_filename
 save_results(results, evaluation_results, prompts, results_filename)

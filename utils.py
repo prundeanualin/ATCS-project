@@ -34,7 +34,7 @@ def save_results(results, evaluation_metrics, prompts, filename):
     with open(detailed_save_file, 'wb') as f:
         pickle.dump(results, f)
     with open(readable_save_file, 'w') as f:
-        f.write("-- Some of the prompts that have been fed to the model")
+        f.write("-- Some of the prompts that have been fed to the model\n")
         for p in prompts:
             f.write(p + '\n===========\n')
         f.write("============================================\n\n")

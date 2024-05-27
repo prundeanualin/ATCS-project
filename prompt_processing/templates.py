@@ -9,19 +9,21 @@ between A and C and apply this relationship on the concept in B in order to find
 """
 
 BASELINE_INDICATION = """
-Respond only with the answer! Give no explanation and no other words, apart from the answer!
+Question: {}
+Answer: The final answer is
 """
 
-STRUCTURED_BASELINE_INDICATION = """
-Question: If A is like B, then C is like ...
-Answer: If A is like B, then C is like D
-
+COT_INSTRUCTION = """
 Question: {}
-Answer: 
+Answer: Let's first think this step by step and then give the final answer at the end phrased like 'The answer is: ...'.
+"""
+
+COT_INSTRUCTION_FEW_SHOT = """
+Question: {}
+Answer: Let's first think this step by step (like in the examples above) and then give the final answer at the end phrased like 'The answer is: ...'.
 """
 
 FEW_SHOT_TEMPLATE = """
 Question: {}
 Answer: {}
 """
-COT_INSTRUCTION = "Let's think step by step. "
