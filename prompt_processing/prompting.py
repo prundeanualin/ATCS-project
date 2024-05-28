@@ -29,9 +29,9 @@ def prepare_prompt(inference, examples, n_shot: int, baseline: bool, cot: bool, 
 
         # Now add the inference analogy in the same Question/Answer template
         # //TODO try to include a prompt where the model is told to respond in a specific format with the final answer so that we can use that in evaluation (maybe below)
-        if special_instruction == 'cot_few_structured':
+        if special_instruction == 'cot_few_like0':
             # Add a special format for cot, so that the model is guided on a final response format
-            prompt += COT_INSTRUCTION_FEW_SHOT.format(inference)
+            prompt += COT_INSTRUCTION.format(inference)
         else:
             # Add the inference analogy in the same Question/Answer template, with an empty answer
             prompt += FEW_SHOT_TEMPLATE.format(inference, '')
