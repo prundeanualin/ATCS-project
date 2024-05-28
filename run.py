@@ -35,7 +35,7 @@ args = parser.parse_args()
 print("CL Arguments are:")
 print(args)
 
-CHANGE HF_TOKEN TO YOUR OWN TOKEN
+# CHANGE HF_TOKEN TO YOUR OWN TOKEN
 os.environ['HF_TOKEN'] = "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"
 os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '1'
 
