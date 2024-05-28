@@ -18,11 +18,6 @@ Question: {}
 Answer: Let's first think this step by step and then give the final answer at the end phrased like 'The answer is: ...'.
 """
 
-COT_INSTRUCTION_FEW_SHOT = """
-Question: {}
-Answer: Let's first think this step by step (like in the examples above) and then give the final answer at the end phrased like 'The answer is: ...'.
-"""
-
 FEW_SHOT_TEMPLATE = """
 Question: {}
 Answer: {}
