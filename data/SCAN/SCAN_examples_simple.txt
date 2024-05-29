@@ -74,11 +74,10 @@ bacterial mutation,slot machine,mutating,spinning,,science
 Imagine you have a toy with a colored wheel that you can spin around and around. This spinning is the purpose of that toy, which in our case is a slot machine which looks a little bit different each time you spin it. Now, think about the tiny living things called bacteria. Sometimes they change a little bit, like how your toy spins. That's called mutating. Therefore, just as spinning is what the slot machine does, mutating is what a bacterial mutation does. Therefore, the answer is mutating.
 
 accepting a belief,buying an item,believer,buyer,,metaphor
-Imagine you have a friend who believes in ghosts. This friend is called a "believer." Now, think about another friend who goes to the store and buys candy. This friend is called a "buyer." So, in simple terms: Just like accepting a belief makes someone a believer,
-Buying an item makes someone a buyer. Therefore, the answer is a buyer.
+Imagine you have a friend who believes in ghosts. This friend is called a "believer." Now, think about another friend who goes to the store and buys candy. This friend is called a "buyer." So, in simple terms: Just like accepting a belief makes someone a believer, buying an item makes someone a buyer. Therefore, the answer is a buyer.
 
 accepting a belief,buying an item,belief,merchandise,,metaphor
-Imagine you have a belief in your mind. This belief is something you accept and hold onto. Now, think about when you go to a store and buy an item. That item you buy is called merchandise. So, in simple terms: Just like accepting a belief means you have a belief, Buying an item means you have merchandise. Therefore, the answer is merchandise.
+Imagine you have a belief in your mind. This belief is something you accept and hold onto. Now, think about when you go to a store and buy an item. That item you buy is called merchandise. So, in simple terms: Just like accepting a belief means you have a belief, buying an item means you have merchandise. Therefore, the answer is merchandise.
 
 accepting a belief,buying an item,advocating,selling,,metaphor
 When you accept a belief, someone might be telling you about it or encouraging you to believe in it. That's called advocating. When you buy something, there's someone else involved who's selling it to you. That's the seller—they're the ones doing the selling. Just as advocating is what someone does when they want you to accept a belief, selling is what the seller does when you buy something. Therefore, the answer is advocating.
