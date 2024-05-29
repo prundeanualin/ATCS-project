@@ -1,4 +1,3 @@
-
 atom,solar system,nucleus,sun,,science
 Imagine the atom is like a family with the nucleus as the parent. All the electrons are like kids spinning around the parent. Similarly, in the solar system, the sun is like the parent, and other tiny things (planets) spin around it like kids. Therefore, the answer is sun.
 
