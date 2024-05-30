@@ -10,11 +10,12 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
+
 class EvaluationStrategy:
     def __init__(self):
         self.tokenizer = None
 
-    def evaluate(self, generated_text: str, label: str, alternative_labels: list[str]):
+    def evaluate(self, generated_text: str, sample: dict):
         raise NotImplementedError
 
 
@@ -22,7 +23,9 @@ class RegexEvaluationStrategy(EvaluationStrategy):
     def __init__(self):
         super().__init__()
 
-    def evaluate(self, generated_text: str, label: str, alternative_labels: list[str]):
+    def evaluate(self, generated_text: str, sample: dict):
+        label = sample['label']
+        alternative_labels = sample['alternatives']
         labels = [i.lower() for i in alternative_labels + [label]]
     
         for label_i in labels:
@@ -36,7 +39,9 @@ class SimpleEvaluationStrategy(EvaluationStrategy):
     def __init__(self):
         super().__init__()
 
-    def evaluate(self, generated_text: str, label: str, alternative_labels: list[str]):
+    def evaluate(self, generated_text: str, sample: dict):
+        label = sample['label']
+        alternative_labels = sample['alternatives']
         labels = alternative_labels + [label]
         # TODO: maybe also test other tokenization strategies
         generated_words = nltk.word_tokenize(generated_text)
@@ -81,13 +86,13 @@ def test_label_in_answer(labels, answer):
         return 0
 
 
-class StructuredEvaluationStrategy():
+class StructuredEvaluationStrategy(EvaluationStrategy):
     def __init__(self, max_length=5, debug=False):
         self.debug = debug
         self.max_length = max_length
         self.lemmatizer = WordNetLemmatizer()
         self.all_pos_tags = [None, wordnet.ADJ, wordnet.ADV, wordnet.NOUN, wordnet.VERB]
-        self.ignored_punctuation = ['...', '..', ',']
+        self.ignored_punctuation = ['...', '..', ',', '``', "''"]
         super().__init__()
 
     def lemmatize(self, words_pos_tagged):
@@ -162,8 +167,7 @@ def evaluate(outputs_and_samples, evaluation_strategy: EvaluationStrategy = Stru
         category = sample['analogy_type']
         score = evaluation_strategy.evaluate(
             generated_output,
-            sample['label'],
-            sample['alternatives']
+            sample
         )
         total_score += score
 
@@ -188,13 +192,12 @@ if __name__ == '__main__':
     results = pd.read_pickle(results_file)
 
     regex_evaluation = RegexEvaluationStrategy()
-    final_evaluation = StructuredEvaluationStrategy()
+    final_evaluation = StructuredEvaluationStrategy(debug=True)
     for sample, generated_output in results[:100]:
         print("--------")
         regex_score = regex_evaluation.evaluate(
             generated_output,
-            sample['label'],
-            sample['alternatives']
+            sample
         )
         final_score = final_evaluation.evaluate(
             generated_output,

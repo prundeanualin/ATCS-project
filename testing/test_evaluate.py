@@ -419,6 +419,16 @@ station
         correct = evaluation.evaluate(tsample.test_text, tsample.sample)
         self.assertEqual(correct, 1)
 
+    def test_notfound_answer19(self):
+        tsample = TestSample("gas molecules", "billiard balls", "hot", "fast", test_text="""
+The final answer is: Speed!
+
+Just like how billiard balls move fast when struck with more force, gas molecules move faster when they're hotter. 
+The increased kinetic energy of the molecules means they're moving at a higher speed, which is what we
+ """)
+        correct = evaluation.evaluate(tsample.test_text, tsample.sample)
+        self.assertEqual(correct, 0)
+
 
 if __name__ == '__main__':
     unittest.main()

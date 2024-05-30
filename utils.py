@@ -67,7 +67,7 @@ direct_answer_pattern = ["final answer be", "correct answer be", "answer be"]
 
 # The end characters
 stop = ['.', '?', '!']
-r_stop = r'([' + ''.join(stop) + r'])'
+r_stop = r'?)([' + ''.join(stop) + r'])'
 
 # Regex pattern to match any of the answer substrings and capture
 # the following words until one of the end character
@@ -94,7 +94,7 @@ def limit_to_max_nr_words(text, max_length):
 
 
 def extract_regex_pattern(regex, text, match_id, max_nr_words_without_stop):
-    pattern_with_stop = re.compile(regex + r_stop)
+    pattern_with_stop = re.compile(regex[:-1] + r_stop)
     pattern = re.compile(regex)
 
     match = pattern_with_stop.search(text)
