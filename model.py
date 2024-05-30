@@ -18,7 +18,7 @@ class LLMObj:
         # If tokenizer name is empty, then load it based on the model's name
         if not tokenizer_name:
             tokenizer_name = model
-        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, trust_remote_code=True)
 
         if dummy_pipeline:
             pipe = DummyPipeline(tokenizer)
