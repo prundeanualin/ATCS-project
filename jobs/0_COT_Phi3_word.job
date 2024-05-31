@@ -2,11 +2,11 @@
 
 #SBATCH --partition=gpu
 #SBATCH --gpus=2
-#SBATCH --job-name=Phi3_COT_word
+#SBATCH --job-name=Phismall_COT_word
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=30:00:00
-#SBATCH --output=job_outputs/0shot_COT/Phi3_slurm_output_%A_word.out
+#SBATCH --output=job_outputs/0shot_COT/%x_%A_word.out
 
 module purge
 module load 2022

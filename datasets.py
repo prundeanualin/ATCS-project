@@ -316,8 +316,9 @@ class BATSDataloader_fewshot:
                 for ex in random.sample(example, n_shot):
                     if self.COT:
                         ex_question = "Question: " + self.promptFormat.format(ex['word_A'], ex['word_B'], ex['word_C'])
-                        ex_answer = " Answer: " + self.promptFull.format(ex['word_A'], ex['word_B'], ex['word_C'], ex['label'])
-                        ex_reasoning = "The reason is that, " + ex[self.explanation] if self.explanation in ex else ""                    
+                        #ex_answer = " Answer: " + self.promptFull.format(ex['word_A'], ex['word_B'], ex['word_C'], ex['label'])
+                        ex_answer = " Answer: "
+                        ex_reasoning = ex[self.explanation] if self.explanation in ex else ""                    
                         examplars.append(ex_question + ex_answer + ex_reasoning)
                     else:
                         examplars.append(self.promptFull.format(ex['word_A'], ex['word_B'], ex['word_C'], ex['label']))
@@ -345,8 +346,9 @@ class BATSDataloader_fewshot:
                 for ex in random.sample(example, n_shot):
                     if self.COT:
                         ex_question = "Question: " + self.promptFormat.format(ex['word_A'], ex['word_C'], ex['word_B'])
-                        ex_answer = " Answer: " + self.promptFull.format(ex['word_A'], ex['word_C'], ex['word_B'], ex['label'])
-                        ex_reasoning = "The reason is that, " + ex[self.explanation] if self.explanation in ex else ""
+                        #ex_answer = " Answer: " + self.promptFull.format(ex['word_A'], ex['word_C'], ex['word_B'], ex['label'])
+                        ex_answer = " Answer: "
+                        ex_reasoning = ex[self.explanation] if self.explanation in ex else ""
                         examplars.append(ex_question + ex_answer + ex_reasoning)
                     else:
                         examplars.append(self.promptFull.format(ex['word_A'], ex['word_C'], ex['word_B'], ex['label']))

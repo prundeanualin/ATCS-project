@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_mig
+#SBATCH --gpus=1
+#SBATCH --job-name=test_analogy
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=10:00:00
+#SBATCH --output=job_outputs/test/%x_%A.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+# srun python Project/inference.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha"
+
+# zero shot
+# --datasets (default: 'BATS') --BATS_filename --prompt_structure (default: 'by-relation'))  --COT_template (default:False) --number_of_analogy (default:all)
+srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 20
+srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 25
+srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 30
+srun python ../run.py --dataset "BATS" --BATS_filename "L01 [hypernyms - animals]" --number_of_analogy 40

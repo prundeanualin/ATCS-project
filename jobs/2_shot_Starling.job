@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=2
+#SBATCH --job-name=2shot_Starling
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=30:00:00
+#SBATCH --output=job_outputs/fewshot/%x_%A.out
+#SBATCH --error=job_outputs/fewshot_error/%x_%A.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+# Activate your environment
+source activate ATCS-project
+
+# for few shot, default model = Phi3-mini, ran on all files
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L01 [hypernyms - animals]" --number_of_shot 2 --number_of_analogy 50
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L02 [hypernyms - misc]" --number_of_shot 2 --number_of_analogy 50
+srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L03 [hyponyms - misc]" --number_of_shot 2 --number_of_analogy 50
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L04 [meronyms - substance]" --number_of_shot 2 --number_of_analogy 50
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L05 [meronyms - member]" --number_of_shot 2 --number_of_analogy 50
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L06 [meronyms - part]" --number_of_shot 2 --number_of_analogy 50
+srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L07 [synonyms - intensity]" --number_of_shot 2 --number_of_analogy 50
+srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L08 [synonyms - exact]" --number_of_shot 2 --number_of_analogy 50
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L09 [antonyms - gradable]" --number_of_shot 2 --number_of_analogy 50
+# srun python -u ../run.py --model "berkeley-nest/Starling-LM-7B-alpha" --tokenizer "berkeley-nest/Starling-LM-7B-alpha" --dataset "BATS-fewshot" --BATS_filename "L10 [antonyms - binary]" --number_of_shot 2 --number_of_analogy 50

@@ -60,7 +60,7 @@ elif args.dataset == 'BATS':
         fileName = args.BATS_filename,
         numberOfAnalogy=args.number_of_analogy,
         cot = args.COT_template,
-        shuffle = True,
+        shuffle = False,
         promptType = args.prompt_structure,
         promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE
     )
@@ -71,7 +71,7 @@ elif args.dataset == 'BATS-fewshot':
         numberOfShot = args.number_of_shot,
         numberOfAnalogy = args.number_of_analogy,
         cot = args.COT_template,
-        shuffle = True,
+        shuffle = False,
         promptType = args.prompt_structure,
         promptFormat = ANALOGY_TEMPLATE_SIMPLE_INFERENCE,
         promptFull = ANALOGY_TEMPLATE_SIMPLE_FULL,
