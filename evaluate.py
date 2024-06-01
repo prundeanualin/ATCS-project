@@ -160,55 +160,200 @@ class StructuredEvaluationStrategy(EvaluationStrategy):
         return self.evaluate_strategies_fallback(concatenated, labels_lemmatized, sample)
 
 
-def evaluate(outputs_and_samples, evaluation_strategy: EvaluationStrategy = StructuredEvaluationStrategy()):
-    total_score = 0
+def evaluate(outputs_and_samples):
+    eval_strategy_struct = StructuredEvaluationStrategy()
+    eval_strategy_regex = RegexEvaluationStrategy()
+    total_score_struct = 0
+    total_score_regex = 0
     score_per_category = {}
+    total_avg_output = 0
     for sample, generated_output in outputs_and_samples:
         category = sample['analogy_type']
-        score = evaluation_strategy.evaluate(
+        # Use the new evaluation strategy
+        score_struct = eval_strategy_struct.evaluate(
             generated_output,
             sample
         )
-        total_score += score
+        total_score_struct += score_struct
+        # Use the regex evaluation
+        scoore_regex = eval_strategy_regex.evaluate(
+            generated_output,
+            sample
+        )
+        total_score_regex += scoore_regex
 
         if category not in score_per_category:
-            score_per_category[category] = {'total': 0, 'correct': 0, 'acc': 0.0}
+            score_per_category[category] = {'correct_struct': 0, 'correct_regex': 0, 'total': 0, 'avg_length': 0, 'max_length': 0, 'min_length': 1000, 'acc_struct': 0.0, 'acc_regex': 0.0}
+
         score_per_category[category]['total'] += 1
-        score_per_category[category]['correct'] += score
-    final_score = total_score / len(outputs_and_samples) * 100
+        score_per_category[category]['correct_struct'] += score_struct
+        score_per_category[category]['correct_regex'] += scoore_regex
+        score_per_category[category]['avg_length'] += len(generated_output.split())
+        if len(generated_output) > score_per_category[category]['max_length']:
+            score_per_category[category]['max_length'] = len(generated_output.split())
+        if len(generated_output) < score_per_category[category]['min_length']:
+            score_per_category[category]['min_length'] = len(generated_output.split())
+        total_avg_output += len(generated_output.split())
+
+    final_score_struct = total_score_struct / len(outputs_and_samples) * 100
+    final_score_regex = total_score_regex / len(outputs_and_samples) * 100
+
+    final_avg_length = int(total_avg_output / len(outputs_and_samples))
+    final_min_length = 1000
+    final_max_length = 0
     for c in score_per_category:
-        score_per_category[c]['acc'] = score_per_category[c]['correct'] / score_per_category[c]['total'] * 100
-    score_per_category['all'] = {'total': len(outputs_and_samples), 'correct': total_score, 'acc': final_score}
+        score_per_category[c]['acc_struct'] = score_per_category[c]['correct_struct'] / score_per_category[c]['total'] * 100
+        score_per_category[c]['acc_regex'] = score_per_category[c]['correct_regex'] / score_per_category[c]['total'] * 100
+        score_per_category[c]['avg_length'] = int(score_per_category[c]['avg_length'] / score_per_category[c]['total'])
+        if score_per_category[c]['min_length'] < final_min_length:
+            final_min_length = score_per_category[c]['min_length']
+        if score_per_category[c]['max_length'] > final_max_length:
+            final_max_length = score_per_category[c]['max_length']
+    score_per_category['all'] = {
+        'total': len(outputs_and_samples),
+        'correct_struct': total_score_struct,
+        'correct_regex': total_score_regex,
+        'acc_struct': final_score_struct,
+        'acc_regex': final_score_regex,
+        'avg_length': final_avg_length,
+        'min_length': final_min_length,
+        'max_length': final_max_length
+    }
     return score_per_category
 
 
-def evaluate_from_file(results_file, evaluation_strategy: EvaluationStrategy):
+def evaluate_from_file(results_file):
     results = pd.read_pickle(results_file)
-    return evaluate(results, evaluation_strategy)
+    return evaluate(results)
 
 
 if __name__ == '__main__':
-    results_file = "results/SCAN/0shot_cot(False)_description(False)_examples(baseline)_baseline_Meta-Llama-3-8B-Instruct.pl"
-    results = pd.read_pickle(results_file)
 
-    regex_evaluation = RegexEvaluationStrategy()
-    final_evaluation = StructuredEvaluationStrategy(debug=True)
-    for sample, generated_output in results[:100]:
-        print("--------")
-        regex_score = regex_evaluation.evaluate(
-            generated_output,
-            sample
-        )
-        final_score = final_evaluation.evaluate(
-            generated_output,
-            sample
-        )
-        if regex_score != final_score:
-            print("Different For sample: ")
-            print("- Inference:             " + sample['inference'])
-            print(f"- Label & alternatives:  {sample['label']} - {sample['alternatives']}")
-            print("- Generated:")
-            print(generated_output)
-            print("Regex score is: ", regex_score)
-            print(f"Final score is: {final_score}")
-        print("------------\n")
+    result_files = {
+        "0shot": {
+            "cot": [
+                "results/0shot/cot/0shot_cot(True)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                "results/0shot/cot/0shot_cot(True)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                "results/0shot/cot/0shot_cot(True)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+            ],
+            "nocot": [
+                "results/0shot/nocot/baseline_semi_struct/0shot_cot(False)_description(False)_examples(baseline)_baseline_Meta-Llama-3-8B-Instruct.pl",
+                "results/0shot/nocot/baseline_semi_struct/0shot_cot(False)_description(False)_examples(baseline)_baseline_Phi-3-mini-128k-instruct.pl",
+                "results/0shot/nocot/baseline_semi_struct/0shot_cot(False)_description(False)_examples(baseline)_baseline_Starling-LM-7B-alpha.pl"
+            ],
+            "variations": {
+                "nocot": {
+                    "raw": [
+                        "results/0shot/nocot/raw_just_sample/0shot_cot(False)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                        "results/0shot/nocot/raw_just_sample/0shot_cot(False)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                        "results/0shot/nocot/raw_just_sample/0shot_cot(False)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+                    ],
+                    "strict": [
+                        "results/0shot/nocot/baseline_variations/0shot_cot(False)_description(False)_examples(baseline)_baseline_Meta-Llama-3-8B-Instruct.pl",
+                        "results/0shot/nocot/baseline_variations/0shot_cot(False)_description(False)_examples(baseline)_baseline_Phi-3-mini-128k-instruct.pl",
+                        "results/0shot/nocot/baseline_variations/0shot_cot(False)_description(False)_examples(baseline)_baseline_Starling-LM-7B-alpha.pl"
+                    ],
+                    "struct_default_general_example": [
+                        "results/0shot/nocot/baseline_variations/0shot_cot(False)_description(False)_examples(baseline)_STbaseline_Meta-Llama-3-8B-Instruct.pl",
+                        "results/0shot/nocot/baseline_variations/0shot_cot(False)_description(False)_examples(baseline)_STbaseline_Phi-3-mini-128k-instruct.pl",
+                        "results/0shot/nocot/baseline_variations/0shot_cot(False)_description(False)_examples(baseline)_STbaseline_Starling-LM-7B-alpha.pl"
+                    ]
+                },
+                "cot_simple_instruction": [
+                    "results/0shot/cot/cot_simple_instruction/0shot_cot(True)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                    "results/0shot/cot/cot_simple_instruction/0shot_cot(True)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                    "results/0shot/cot/cot_simple_instruction/0shot_cot(True)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+                ]
+            }
+        },
+        "1shot": {
+            "cot": [
+                "results/1shot/cot/final_cot_1shot_cot(True)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                "results/1shot/cot/final_cot_1shot_cot(True)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                "results/1shot/cot/final_cot_1shot_cot(True)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+            ],
+            "nocot": [
+                "results/1shot/nocot/1shot_cot(False)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                "results/1shot/nocot/1shot_cot(False)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                "results/1shot/nocot/1shot_cot(False)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+            ],
+            "example_types": {
+                "complex": [
+                    "results/1shot/cot/example_variations/complex/1shot_cot(True)_description(False)_examples(complex)_Meta-Llama-3-8B-Instruct.pl",
+                    "results/1shot/cot/example_variations/complex/1shot_cot(True)_description(False)_examples(complex)_Phi-3-mini-128k-instruct.pl",
+                    "results/1shot/cot/example_variations/complex/1shot_cot(True)_description(False)_examples(complex)_Starling-LM-7B-alpha.pl"
+                ],
+                "long": [
+                    "results/1shot/cot/example_variations/long/1shot_cot(True)_description(False)_examples(long)_Meta-Llama-3-8B-Instruct.pl",
+                    "results/1shot/cot/example_variations/long/1shot_cot(True)_description(False)_examples(long)_Phi-3-mini-128k-instruct.pl",
+                    "results/1shot/cot/example_variations/long/1shot_cot(True)_description(False)_examples(long)_Starling-LM-7B-alpha.pl"
+                ],
+                "short": [
+                    "results/1shot/cot/example_variations/short/1shot_cot(True)_description(False)_examples(short)_Meta-Llama-3-8B-Instruct.pl",
+                    "results/1shot/cot/example_variations/short/1shot_cot(True)_description(False)_examples(short)_Phi-3-mini-128k-instruct.pl",
+                    "results/1shot/cot/example_variations/short/1shot_cot(True)_description(False)_examples(short)_Starling-LM-7B-alpha.pl"
+                ],
+                "simple": [
+                    "results/1shot/cot/example_variations/simple/1shot_cot(True)_description(False)_examples(simple)_Meta-Llama-3-8B-Instruct.pl",
+                    "results/1shot/cot/example_variations/simple/1shot_cot(True)_description(False)_examples(simple)_Phi-3-mini-128k-instruct.pl",
+                    "results/1shot/cot/example_variations/simple/1shot_cot(True)_description(False)_examples(simple)_Starling-LM-7B-alpha.pl"
+                ]
+            }
+        },
+        "2shot": {
+            "cot": [
+                "results/2shot/cot/2shot_cot(True)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                "results/2shot/cot/2shot_cot(True)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                "results/2shot/cot/2shot_cot(True)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+            ],
+            "nocot": [
+                "results/2shot/nocot/2shot_cot(False)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+                "results/2shot/nocot/2shot_cot(False)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+                "results/2shot/nocot/2shot_cot(False)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+            ]
+        },
+        "4shot": [
+            "results/4shot/4shot_cot(False)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+            "results/4shot/4shot_cot(False)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+            "results/4shot/4shot_cot(False)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+        ],
+        "8shot": [
+            "results/8shot/8shot_cot(False)_description(False)_examples(baseline)_Meta-Llama-3-8B-Instruct.pl",
+            "results/8shot/8shot_cot(False)_description(False)_examples(baseline)_Phi-3-mini-128k-instruct.pl",
+            "results/8shot/8shot_cot(False)_description(False)_examples(baseline)_Starling-LM-7B-alpha.pl"
+        ]
+    }
+
+
+    def print_all_results(result_files, depth=1, filter_model="", print_just_regex_acc=False, print_just_struct_acc=False):
+        for key, value in result_files.items():
+            print("#" * depth + " " + key)
+            if isinstance(value, dict):
+                print_all_results(value, depth + 1, filter_model, print_just_regex_acc, print_just_struct_acc)
+            else:
+                print_results(value, filter_model, print_just_regex_acc, print_just_struct_acc)
+
+    def print_results(result_file_models, filter_model="", print_just_regex_acc=False, print_just_struct_acc=False):
+        for res_file in result_file_models:
+            model_name = res_file.split('_')[-1][:-3]
+            if filter_model in model_name:
+                results = evaluate_from_file(res_file)
+                # print("For model - ", model_name)
+                if print_just_struct_acc:
+                    acc_struct = '%.1f' % results["all"]['acc_struct']
+                    print(f"acc_struct: {acc_struct}")
+                elif print_just_regex_acc:
+                    acc_regex = '%.1f' % results["all"]['acc_regex']
+                    print(f"acc_regex: {acc_regex}")
+                else:
+                    for category in results:
+                        acc_struct = '%.2f' % results[category]['acc_struct']
+                        acc_regex = '%.2f' % results[category]['acc_regex']
+                        print(f"{category} - acc_struct: {acc_struct}  |  acc_regex: {acc_regex}  |  avg_sent_length: {results[category]['avg_length']}"
+                              f"  |  min_length: {results[category]['min_length']}  |  max_length: {results[category]['max_length']}")
+                print("\n")
+
+
+    for model in ["Phi", "Starling", "Llama"]:
+        print("--- For model: ", model)
+        print_all_results(result_files, filter_model=model, print_just_struct_acc=True)
